@@ -1,0 +1,73 @@
+/**Variable**/
+@import 'vxe-table/styles/variable.scss';
+
+/*font*/
+$vxe-font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "\5FAE\8F6F\96C5\9ED1", Arial, sans-serif;
+$vxe-font-color: #515a6e;
+$vxe-font-size-small: 12px;
+
+/*table*/
+$vxe-table-font-color: $vxe-font-color;
+
+/*table row*/
+$vxe-table-row-radio-background-color: #f8f8f8;
+$vxe-table-row-hover-radio-background-color: #f3f3f3;
+$vxe-table-row-checked-background-color: #f8f8f8;
+$vxe-table-row-hover-checked-background-color: #f3f3f3;
+
+/*table cell*/
+$vxe-table-cell-padding-left: 18px;
+$vxe-table-cell-padding-right: 18px;
+
+@import 'vxe-table/styles/modules.scss';
+
+
+/*table*/
+.vxe-table {
+  &.size--small {
+    .vxe-header--column {
+      line-height: unset;
+      height: $vxe-table-row-height-small - 2;
+      &:not(.col--ellipsis) {
+        padding: 0;
+      }
+    }
+    .vxe-body--column,
+    .vxe-footer--column {
+      line-height: unset;
+      height: $vxe-table-row-height-small;
+      &:not(.col--ellipsis) {
+        padding: 0;
+      }
+    }
+    .vxe-cell--checkbox,
+    .vxe-cell--radio {
+      font-size: 16px;
+    }
+    .vxe-cell--checkbox .vxe-checkbox--icon,
+    .vxe-cell--radio .vxe-radio--icon {
+      font-size: 16px;
+    }
+    .vxe-cell--checkbox .vxe-checkbox--label,
+    .vxe-cell--radio .vxe-radio--label {
+      font-size: $vxe-font-size-small;
+    }
+    .col--edit {
+      &.col--actived {
+        .vxe-cell {
+          padding-left: 8px;
+          padding-right: 8px;
+
+          .ivu-checkbox-wrapper {
+            line-height: 33px;
+          }
+        }
+      }
+    }
+    .vxe-cell {
+      .ivu-icon {
+        font-size: 20px;
+      }
+    }
+  }
+}

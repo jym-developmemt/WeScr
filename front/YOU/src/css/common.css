@@ -1,0 +1,368 @@
+.clickable {
+    cursor: pointer;
+}
+
+.link {
+    color: #2E89D0;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.focus-blue:focus {
+    color: #2d8cf0;
+    background-color: #f0faff;
+}
+
+.option-card .ivu-card-body {
+    padding: 8px 0px;
+}
+
+.transparent-card,
+.ivu-card-head:hover {
+    background-color: transparent;
+    box-shadow: none!important;
+}
+
+.transparent-card .ivu-card-head {
+    border-bottom: none;
+}
+
+.transparent-card .ivu-card-body {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.closing-tab .ivu-tabs-bar {
+    margin-bottom: 0px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-wrap {
+    white-space: pre-wrap;
+}
+
+.text-nowrap {
+    white-space: nowrap;
+}
+
+.text-overflow {
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.text-overflow-1 {
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.text-overflow-2 {
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.color-blue {
+    color: #2D8CF0!important;
+}
+
+.color-green {
+    color: #1DBF6D!important;
+}
+
+.color-red {
+    color: #ED4014!important;
+}
+
+.color-yellow {
+    color: #FF9900!important;
+}
+
+.color-black {
+    color: #17233d!important;
+}
+
+.color-white {
+    color: #f8f8f9!important;
+}
+
+.backcolor-blue {
+    background-color: #2D8CF0!important;
+}
+
+.backcolor-green {
+    background-color: #1DBF6D!important;
+}
+
+.backcolor-red {
+    background-color: #ED4014!important;
+}
+
+.backcolor-yellow {
+    background-color: #FF9900!important;
+}
+
+.backcolor-lyellow {
+    background-color: #FFFFF4!important;
+}
+.backcolor-orange {
+    background-color: #FFE4CA!important;
+}
+
+.backcolor-black {
+    background-color: #17233d!important;
+}
+
+.backcolor-white {
+    background-color: #f8f8f9!important;
+}
+
+.bordercolor-blue {
+    border: 1px solid #2D8CF0!important;
+}
+
+.bordercolor-green {
+    border: 1px solid #1DBF6D!important;
+}
+
+.bordercolor-red {
+    border: 1px solid #ED4014!important;
+}
+
+.bordercolor-yellow {
+    border: 1px solid #FF9900!important;
+}
+
+.bordercolor-black {
+    border: 1px solid #17233d!important;
+}
+
+.bordercolor-white {
+    border: 1px solid #f8f8f9!important;
+}
+
+td.backcolor-blue-td {
+    background-color: #2D8CF0!important;
+}
+
+td.backcolor-green-td {
+    background-color: #1DBF6D!important;
+}
+
+td.backcolor-red-td {
+    background-color: #ED4014!important;
+}
+
+td.backcolor-yellow-td {
+    color: #17233d;
+    background-color: #FF9900!important;
+}
+
+td.backcolor-black-td {
+    color: #f8f8f9;
+    background-color: #17233d!important;
+}
+
+td.backcolor-white-td {
+    color: #17233d;
+    background-color: #f8f8f9!important;
+}
+
+.font-size-72 {
+    font-size: 72px;
+}
+
+.font-size-36 {
+    font-size: 36px;
+}
+
+.font-size-28 {
+    font-size: 28px;
+}
+
+.font-size-20 {
+    font-size: 20px;
+}
+
+.font-size-14 {
+    font-size: 14px;
+}
+
+.font-title {
+    color: #17233d;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 32px;
+}
+
+.h1 {
+    font-size: 28px;
+    font-weight: bolder;
+}
+
+.h2 {
+    font-size: 21px;
+    font-weight: bolder;
+}
+
+.h3 {
+    font-size: 16px;
+    font-weight: bolder;
+}
+
+.h4 {
+    font-size: 14px;
+    font-weight: bolder;
+}
+
+.h5 {
+    font-size: 12px;
+    font-weight: bolder;
+}
+
+.margin_0 {
+    margin: 0px;
+}
+
+.margin_top_0 {
+    margin-top: 0px;
+}
+
+.margin_right_0 {
+    margin-right: 0px;
+}
+
+.margin_bottom_0 {
+    margin-bottom: 0px;
+}
+
+.margin_left_0 {
+    margin-left: 0px;
+}
+
+.width_20 {
+    width: 20px;
+}
+
+.width_40 {
+    width: 40px;
+}
+
+.width_60 {
+    width: 60px;
+}
+
+.width_80 {
+    width: 80px;
+}
+
+.width_100 {
+    width: 100px;
+}
+
+.width_120 {
+    width: 120px;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.hidden {
+    display: none;
+}
+
+.button-col {
+    text-align: right;
+}
+
+.button-col button {
+    margin-left: 8px;
+}
+
+.button-area {
+    text-align: center;
+}
+
+.button-area button {
+    margin: 0px 8px;
+}
+
+.default-card {
+    margin: 0px 8px;
+}
+
+/* 
+.default-card:last-child {
+    margin-bottom: 8px;
+}
+ */
+
+.default-card>.ivu-col {
+    padding: 8px;
+}
+
+.mini-table .ivu-table-cell {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+/** iView样式修正 */
+.ivu-tooltip {
+    width: 100%;
+}
+
+.ivu-table-cell {
+    white-space: unset;
+}
+
+.dashboard-table .ivu-table {
+    background-color: transparent;
+}
+
+.dashboard-table .ivu-table .ivu-table-header thead tr th {
+    padding: 2px 0px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.dashboard-table .ivu-table.ivu-table-small td {
+    height: auto;
+    padding: 2px 0px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.ivu-menu .ivu-menu-submenu .ivu-menu .ivu-menu-submenu {
+    margin-left: -10px;
+}
+
+.ivu-menu .ivu-menu-submenu .ivu-menu .ivu-menu-item {
+    margin-left: -10px;
+    padding-right: 0px;
+}
+
+.ivu-form-item-required .ivu-form-item-label:before {
+    line-height: 0.5;
+}
