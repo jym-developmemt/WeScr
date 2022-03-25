@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.core.dao.SearchDataDao">
+
+	<!-- 取得查询对应数据(list) -->
+	<select id="getSearchDataList" parameterType="we.core.model.SearchDataModel" resultType="map">
+		SELECT
+		<foreach collection="columnList" item="selectColumn" separator=",">
+			${selectColumn}
+		</foreach>
+		FROM
+		<foreach collection="tableList" item="tableItem">
+			${tableItem}
+		</foreach>
+		<where>
+			<foreach collection="conditionList" item="conditionItem">
+				${conditionItem}
+			</foreach>
+		</where>
+		<if test="orderList != null">
+			<foreach collection="orderList" item="orderClause" open="ORDER BY " separator=",">
+				${orderClause}
+			</foreach>
+		</if>
+	</select>
+
+	<!-- 取得查询对应数据(map) -->
+	<select id="getSearchData"	parameterType="we.core.model.SearchDataModel" resultType="map">
+		SELECT
+		<foreach collection="columnList" item="selectColumn" separator=",">
+			${selectColumn}
+		</foreach>
+		FROM
+		<foreach collection="tableList" item="tableItem">
+			${tableItem}
+		</foreach>
+		<where>
+			<foreach collection="conditionList" item="conditionItem">
+				${conditionItem}
+			</foreach>
+		</where>
+		<if test="orderList != null">
+			<foreach collection="orderList" item="orderClause" open="ORDER BY " separator=",">
+				${orderClause}
+			</foreach>
+		</if>
+	</select>
+</mapper>

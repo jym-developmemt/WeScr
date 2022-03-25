@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.website.dao.LocaleMessageDao">
+
+	<!-- 多语言消息检索 -->
+	<select id="searchLocaleMessage"
+	    parameterType="we.website.model.LocaleMessageModel"
+	    resultType="we.website.model.LocaleMessageModel">
+		select locale_id localeId
+			, message_type messageType
+			, message_id messageId
+			, message_content messageContent
+			, source_id sourceId
+		from m_locale_message
+		<where>
+			<if test="localeId != null and localeId != ''">
+				locale_id = #{localeId}
+		    </if>
+			<if test="sourceId != null and sourceId != ''">
+				and source_id = #{sourceId}
+		    </if>
+		</where>
+	</select>
+
+	<!-- 多语言消息追加 -->
+	<insert id="insertLocaleMessage"
+	    parameterType="we.website.model.LocaleMessageModel">
+		insert into m_locale_message
+		(
+			  locale_id
+			, message_type
+			, message_id
+			, message_content
+			, source_id
+			, updated_date
+			, updated_by
+		) values (
+			  #{localeId}
+			, #{messageType}
+			, #{messageId}
+			, #{messageContent}
+			, #{sourceId}
+			, now()
+			, now()
+		)
+	</insert>
+
+	<!-- 多语言消息追加 -->
+	<delete id="deleteLocaleMessage"
+	    parameterType="we.website.model.LocaleMessageModel">
+		delete from m_locale_message
+		<where>
+			<if test="localeId != null and localeId != ''">
+				locale_id = #{localeId}
+		    </if>
+			<if test="sourceId != null and sourceId != ''">
+				and source_id = #{sourceId}
+		    </if>
+		</where>
+	</delete>
+
+</mapper>

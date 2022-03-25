@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.website.dao.CallProcedureDao">
+	<select id="checkProcedure" statementType="CALLABLE" parameterType="we.core.model.DataSourceDataModel" resultType="map" >
+			exec ${tableName}  
+		<foreach collection="dataParam" item="value" index="key"  separator=",">
+			${value}
+		</foreach>
+	</select>
+</mapper>
+	<!-- 分页查询 -->
+<!-- 	<select id="paginationCallProcedure" statementType="CALLABLE" parameterType="we.website.model.SearchDataModel" resultType="map" >
+		exec ${tableName}
+			#{startNum,mode=IN},
+			#{pageSize,mode=IN},
+			#{conditionParam.cnt,mode=OUT,jdbcType=INTEGER,javaType=String}
+			<foreach collection="columnList2" item="whereClause">
+				, #{conditionParam.${whereClause.columnId},javaType=String}
+			</foreach>
+	</select>
+ -->
+	<!-- 一览查询 -->
+	<!-- <select id="searchCallProcedure" statementType="CALLABLE" parameterType="we.website.model.SearchDataModel" resultType="map" >
+		exec ${tableName}
+			0,
+			0,
+			#{conditionParam.cnt,mode=OUT,jdbcType=INTEGER,javaType=String}
+			<foreach collection="columnList2" item="whereClause">
+				, #{conditionParam.${whereClause.columnId},javaType=String}
+			</foreach>
+	</select> -->
+
+	<!-- 明细查询 -->
+	<!-- <select id="findCallProcedure" statementType="CALLABLE" parameterType="we.website.model.SearchDataModel" resultType="map" >
+		exec ${tableName}
+			<foreach collection="columnList2" item="whereClause" separator=",">
+				#{conditionParam.${whereClause.columnId},javaType=String}
+			</foreach>
+	</select>
+
+
+	<select id="doCallProcedure" statementType="CALLABLE" parameterType="we.website.model.SearchDataModel" resultType="map" >
+		exec ${tableName}
+		<foreach collection="columnList1" item="whereClause" separator=",">
+				#{whereClause}
+		</foreach>
+	</select>
+
+
+	<select id="doCallProcedure2" statementType="CALLABLE" parameterType="we.website.model.SearchDataModel" resultType="map" >
+		exec ${tableName}
+	</select>
+ -->
