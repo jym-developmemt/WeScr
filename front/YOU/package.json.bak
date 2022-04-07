@@ -13,13 +13,12 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.1",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/vue-fontawesome": "^2.0.2",
-    "axios": "^0.21.4",
+    "axios": "^0.21.0",
     "bpmn-js": "^7.5.0",
     "bpmn-js-properties-panel": "^0.37.6",
     "camunda-bpmn-moddle": "^4.5.0",
     "core-js": "^3.6.5",
     "echarts": "^4.9.0",
-    "file-saver": "^2.0.5",
     "json-format": "^1.0.1",
     "moment": "^2.29.1",
     "numeral": "^2.0.6",
@@ -32,12 +31,11 @@
     "vue-i18n": "^8.22.1",
     "vue-router": "^3.2.0",
     "vue2-org-tree": "1.2.1",
-    "vuedraggable": "^2.24.3",
     "vuex": "^3.4.0",
     "vxe-table": "^2.9.25",
     "webpack": "^4.0.0",
     "xe-utils": "^2.8.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.16.8"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

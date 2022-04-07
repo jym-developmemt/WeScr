@@ -131,6 +131,41 @@ export default {
             });
     },
 
+    
+    /**
+     * 用户打卡认证
+     * 
+     * @param {*} vi VUE实例
+     * @param {string} userId 用户ID
+     * @param {string} password 密码
+     */
+     userDakaAuth(vi, userId, password) {
+        // 加载开始
+        vi.$store.commit("loadingStart");
+
+        // 请求参数
+        let data = new FormData();
+        data.append("grant_type", "password");
+        data.append("username", userId);
+        data.append("password", password);
+        data.append("client_id", vi.$store.getters.externalInfo.clientIdSite);
+        data.append("client_secret", vi.$store.getters.externalInfo.clientSecretSite);
+
+        // 发送请求
+        return vi.axios.post(process.env.VUE_APP_URL_AUTH + "/oauth/token", data)
+            .then(result => {
+                // 用户认证信息保存
+                vi.$store.commit("accessToken", result.access_token);
+                // 加载完成
+                vi.$store.commit("loadingFinish");
+                return result;
+            })
+            .catch(() => {
+                // 加载错误
+                vi.$store.commit("loadingError");
+            });
+    },
+
     /**
      * 用户登录认证(外部)
      * 
@@ -353,56 +388,6 @@ export default {
             });
     },
 
-    /**
-     * 取得表详细
-     * 
-     * @param {*} vi VUE实例
-     * @param {*} param 名字
-     * @param {*} type 表还是视图
-     * @param {string} callback 回调处理
-     */
-    getDBInfo(vi, param, type, callback) {
-        var processList = []
-        processList.push({
-            //后台要什么数据，就添加什么数据
-             type: 'C01',
-             stringData1:'SP_GET_COLUMNS_INFO_JSN',
-             objData1: {
-              s1:param,
-              s2:type
-             },
-             stringData3: 1
-            
-           });
-           
-        return vi.axios.post("/process/execute", processList)
-            .then(result => {
-                // 加载完成
-                vi.$store.commit("loadingFinish");
-                // 实行表达式
-                var A = JSON.parse(result[0][0].resultValue)
-                let Arr = []
-                for (var i=0;i<A.length;i++) {
-                    Arr.push({
-                        column_index: A[i].column_id,
-                        column_id: A[i].column_name,
-                        display_name: A[i].column_name,
-                        primary_key: A[i].key_ordinal?'○':'',
-                        notnull: A[i].is_nullable?'':'○'
-                    })
-                }
-                var B = callback + '='+ JSON.stringify(Arr)
-                var callBackResult = ExpressionUtil.eval(vi, B);
-                
-                return callBackResult;
-            })
-            .catch(() => {
-                // 加载错误
-                vi.$store.commit("loadingError");
-            });
-      
-    },
-    
     /**
      * 发送请求
      * 

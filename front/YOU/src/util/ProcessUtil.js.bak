@@ -1,6 +1,5 @@
 import ExpressionUtil from "./ExpressionUtil";
 import APIUtil from "./APIUtil";
-import moment from "moment";
 
 /**
  * 处理请求工具类
@@ -205,24 +204,6 @@ function ProcessUtil() {
       targetList[i][key] = srcList[i][key];
     }
   };
-    
-    /**
-   * 数组对象属性设定(权限设定用)
-   * 
-   * @param {array} list 数组
-   * @param {string} key1 条件key
-   * @param {*} value 对象
-   * @param {string} key2 值key
-   */
-  this.listToArrayAuth = function (list, key1, value1, key2) {
-    var rtnList = new Array();
-    for (var i = 0; i < list.length; i++) {
-      if(list[i][key1]==value1){
-        rtnList.push(list[i][key2]);
-      }     
-    }
-    return rtnList.toString();
-  };
 
   /**
    * 对象清空
@@ -274,15 +255,6 @@ function ProcessUtil() {
     }
     return array;
   };
-  
-  /**
-   * 从数组删除最后的对象
-   * @param {array} daarrayta 数组
-   * @param {*} item 对象
-   */
-  this.delArrayFinlly = function (array) {
-      this.vueinstance.$delete(array, array.length - 1);
-  };
 
   /**
    * 数组对象上移
@@ -298,24 +270,6 @@ function ProcessUtil() {
   };
 
   /**
-   * 数组对象上移
-   * 
-   * @param {array} daarrayta 数组
-   * @param {*} item 对象
-   * @param {string} item内容
-   */
-  this.upArrayItem = function (array, item, string) {
-    var i = array.indexOf(item);
-    if (i > 0) {
-      let d = item[string]
-      let D = array[i-1][string]
-      array[i][string] = D
-      array[i-1][string] = d
-      array[i] = array.splice(i - 1, 1, array[i])[0];
-    }
-  };
-
-  /**
    * 数组对象下移
    * 
    * @param {array} daarrayta 数组
@@ -324,24 +278,6 @@ function ProcessUtil() {
   this.downArrayItem = function (array, item) {
     var i = array.indexOf(item);
     if (i < array.length - 1) {
-      array[i] = array.splice(i + 1, 1, array[i])[0];
-    }
-  };
-
-  /**
-   * 数组对象下移
-   * 
-   * @param {array} daarrayta 数组
-   * @param {*} item 对象
-   * @param {string} item内容
-   */
-  this.downArrayItem = function (array, item, string) {
-    var i = array.indexOf(item);
-    if (i < array.length - 1) {
-      let d = item[string]
-      let D = array[i+1][string]
-      array[i][string] = D
-      array[i+1][string] = d
       array[i] = array.splice(i + 1, 1, array[i])[0];
     }
   };
@@ -668,18 +604,8 @@ function ProcessUtil() {
     } else {
       blob = new Blob([data], { type: "application/octet-stream;charset=utf-8" });
     }
-    let FileSaver = require('file-saver');
-    FileSaver.saveAs(blob, fileName);
-  };
-  
-  /***
-   * 取得表详细
-   * @param {*} param 名字
-   * @param {*} type 表还是视图
-   * @param {string} callback 确定时的回调表达式
-   */
-  this.getDB = function (param, type, callback) {
-    return APIUtil.getDBInfo(this.vueinstance, param, type, callback);
+    // let FileSaver = require('file-saver');
+    // FileSaver.saveAs(blob, fileName);
   };
 
   /**
@@ -727,37 +653,6 @@ function ProcessUtil() {
       return APIUtil.sendProcessRequestWithoutLoading(this.vueinstance, processList, callback, baseUrlIndex);
     } else {
       return APIUtil.sendProcessRequest(this.vueinstance, processList, callback, baseUrlIndex);
-    }
-  };
-
-  /**
-   * 日期格式化
-   * 
-   * @param {Date} dateVal 日期数据
-   * @param {string} format 格式
-   */
-  this.dateVal = function (dateVal, format) {
-    if (dateVal == null || dateVal == "") {
-      return null;
-    }
-
-    if (format == null) {
-      format = "YYYY/MM/DD HH:mm:ss"
-    }
-    try{
-      if (dateVal.indexOf('T')>0) {
-       let a  = dateVal.split('-')[0]+'/'+dateVal.split('-')[1]+'/'+dateVal.split('-')[2].split('T')[0]+' '+dateVal.split('T')[1].split(':')[0]+':'+dateVal.split(':')[1]+':'+dateVal.split(':')[2].split('.')[0]
-       return moment(a).format(format)
-      } else if (dateVal.indexOf(':') == 2) {
-        let t = new Date()
-        let at = t.getFullYear() + '/' + (t.getMonth()+1) + '/' + t.getDate() + ' ' + dateVal.split(':')[0] + ':' + dateVal.split(':')[1] + (dateVal.split(':')[2]?':' + dateVal.split(':')[2]:'')
-       
-        return moment(at).format(format)
-      } else {
-       return moment(dateVal).format(format)
-      }
-    } catch (e) {
-       return moment(dateVal).format(format)
     }
   };
 
@@ -814,112 +709,6 @@ function ProcessUtil() {
     num = parseInt(num);
     return (Array(length).join('0') + num).slice(-length);
   }
-  
-  /**
-   * 登陆对象格式化
-   * 
-   * @param {*} insertVal 登陆对象
-   */
-  this.insertVal = function (insertVal) {
-    if (insertVal) {
-      delete insertVal.created_date;
-      delete insertVal.created_by;
-      delete insertVal.updated_date;
-      delete insertVal.updated_by;
-    }
-    return insertVal;
-  };
-
-  /**
-   * 更新对象格式化
-   * 
-   * @param {*} updateVal 更新对象
-   */
-  this.updateVal = function (updateVal) {
-    if (updateVal) {
-      delete updateVal.created_date;
-      delete updateVal.created_by;
-      updateVal.updated_date = null;
-      updateVal.updated_by = null;
-    }
-    return updateVal;
-  };
-  
-   /**
-   * 日期格式化
-   * 
-   * @param {Date} arrayDateVal 日期数据
-   * @param {string} format 格式
-   */
-  this.arrayDateVal = function (arrayDateVal, key, format) {
-    if (arrayDateVal) {
-      for (var i = 0; i < arrayDateVal.length; i++) {
-        if (arrayDateVal[i][key] == null || arrayDateVal[i][key] == "") {
-          arrayDateVal[i][key] == null;
-        }
-    
-        if (format == null) {
-          format = "YYYY/MM/DD HH:mm:ss";
-        }
-        arrayDateVal[i][key]=moment(arrayDateVal[i][key]).format(format);
-      }
-    }
-    return arrayDateVal;
-  };
-
-  /**
-   * 登陆对象格式化
-   * 
-   * @param {*} arrayInsertVal 登陆对象
-   */
-  this.arrayInsertVal = function (arrayInsertVal) {
-    if (arrayInsertVal) {
-      for (var i = 0; i < arrayInsertVal.length; i++) {
-        if (arrayInsertVal[i]) {
-          delete arrayInsertVal[i].created_date;
-          delete arrayInsertVal[i].created_by;
-          delete arrayInsertVal[i].updated_date;
-          delete arrayInsertVal[i].updated_by;
-        }
-      }
-    }
-    return arrayInsertVal;
-  };
-
-  /**
-   * 更新对象格式化
-   * 
-   * @param {*} arrayUpdateVal 更新对象
-   */
-  this.arrayUpdateVal = function (arrayUpdateVal) {
-    if (arrayUpdateVal) {
-      for (var i = 0; i < arrayUpdateVal.length; i++) {
-        if (arrayUpdateVal[i]) {
-          delete arrayUpdateVal[i].created_date;
-          delete arrayUpdateVal[i].created_by;
-          arrayUpdateVal[i].updated_date= null;
-          arrayUpdateVal[i].updated_by= null;
-        }
-      }
-    }
-    return arrayUpdateVal;
-  };
-    
-  /**
-   * 生成随机字符串
-   * 
-   * @param {int} length 长度
-   * 
-   * 
-   */
-  this.getRandomString  = function(n) { // 生成n位长度的字符串
-      var str = "abcdefghijklmnopqrstuvwxyz0123456789"; // 可以作为常量放到random外面
-      var result = "";
-      for(var i = 0; i < n; i++) {
-          result += str[parseInt(Math.random() * str.length)];
-      }
-      return result;  
-  };
 
   /**
    * 去空格
@@ -989,6 +778,8 @@ function ProcessUtil() {
     return (r1 / r2) * Math.pow(10, t2 - t1);
   }
 
+  
+
   /**
    * 数组对象属性设定
    * 
@@ -1004,46 +795,6 @@ function ProcessUtil() {
     }
     return rtnArray;
   }
-
-   /**
-   * 数组对象属性设定
-   * 
-   * @param {array} array1 数组
-   * @param {string} key1 key
-   * @param {array} array2 数组
-   * @param {string} key2 key
-   * @param {array} array3 数组
-   * @param {string} key3 key
-   * @param {*} value 对象
-   */
-    this.arrayToListAuth = function (array1, key1, array2, key2, array3, key3, value) {
-      for (var i = 0; i < array1.length; i++) {
-        var obj = new Object();
-        obj[key1] = array1[i];
-        obj[key2] = array2[i];
-        obj[key3] = value;
-        array3.push(obj);
-      }
-      return array3;
-    };
-    
-  /**
-   * 数组对象属性设定(权限设定用)
-   * 
-   * @param {array} list 数组
-   * @param {string} key1 条件key
-   * @param {*} value 对象
-   * @param {string} key2 值key
-   */
-   this.listToArrayAuth = function (list, key1, value1, key2) {
-    var rtnList = new Array();
-    for (var i = 0; i < list.length; i++) {
-      if(list[i][key1]==value1){
-        rtnList.push(list[i][key2]);
-      }     
-    }
-    return rtnList.toString();
-  };
 }
 
 export default ProcessUtil;

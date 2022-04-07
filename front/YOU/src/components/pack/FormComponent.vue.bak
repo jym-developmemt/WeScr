@@ -29,22 +29,18 @@
         :offset="formItem.offset"
       >
         <FormItem
-          v-if="(formItem.labelWidth!=null?formItem.labelWidth*1:props.labelWidth?props.labelWidth*1:0)>0"
           :prop="formItem.key"
           :label-width="formItem.labelWidth"
           :style="formItem.style"
         >
           <!-- 控件 -->
           <u-dispatcher :element-info="formItem"></u-dispatcher>
-          <span slot="label">{{ formItem.label }}</span>
-        </FormItem>
-        <FormItem
-          v-else
-          :label-width="0"
-          :style="formItem.style"
-        >
-          <!-- 控件 -->
-          <u-dispatcher :element-info="formItem"></u-dispatcher>
+          <span
+            v-if="(formItem.labelWidth!=null?formItem.labelWidth*1:props.labelWidth?props.labelWidth*1:0)>0"
+            slot="label"
+          >
+            {{ formItem.label }}
+          </span>
         </FormItem>
       </Col>
     </Row>

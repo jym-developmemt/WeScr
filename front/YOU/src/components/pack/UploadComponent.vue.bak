@@ -8,7 +8,7 @@
     :multiple="this.props.multiple"
     :paste="this.props.paste"
     :disabled ="disabled"
-    :data="this.props.data?JSON.parse(this.props.data):{}"
+    :data="this.props.data"
     :name="this.props.name"
     :with-credentials="this.props.withCredentials"
     :show-upload-list="this.props.showUploadList"

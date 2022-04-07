@@ -310,17 +310,9 @@ td.backcolor-white-td {
     margin: 0px 8px;
 }
 
-.button-lead {
-    text-align: left;
-}
-
-.button-lead button {
-    margin-right: 8px;
-}
-
-/* .default-card {
+.default-card {
     margin: 0px 8px;
-} */
+}
 
 /* 
 .default-card:last-child {
@@ -328,9 +320,9 @@ td.backcolor-white-td {
 }
  */
 
-/* .default-card>.ivu-col {
+.default-card>.ivu-col {
     padding: 8px;
-} */
+}
 
 .mini-table .ivu-table-cell {
     padding-left: 4px;
@@ -344,11 +336,6 @@ td.backcolor-white-td {
 
 .ivu-table-cell {
     white-space: unset;
-}
-
-.no-padding-cell .vxe-cell {
-    padding-left: 0px;
-    padding-right: 0px;
 }
 
 .dashboard-table .ivu-table {

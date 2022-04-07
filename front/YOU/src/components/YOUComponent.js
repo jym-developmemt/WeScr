@@ -37,6 +37,8 @@ import FormComponent from './pack/FormComponent';
 import TableComponent from './pack/TableComponent';
 import CardCellComponent from './pack/CardCellComponent';
 import UploadComponent from './pack/UploadComponent';
+import ManageUploadComponent from './pack/ManageUploadComponent';
+import CarouselComponent from './base/CarouselComponent';
 import TagGroupComponent from './pack/TagGroupComponent';
 import ListComponent from './pack/ListComponent';
 import PoptipComponent from './pack/PoptipComponent';
@@ -65,6 +67,9 @@ import BPMNComponent from './spec/BPMNComponent';
 import OrgTreeComponent from './spec/OrgTreeComponent';
 import ResourceComponent from './spec/ResourceComponent';
 import CityRegionComponent from './spec/CityRegionComponent';
+import DataImportComponent from './spec/DataImportComponent';
+import ResultsComponent from './spec/ResultsComponent';
+import RetrievalComponent from './spec/RetrievalComponent';
 
 /**
  * YOU组件注册
@@ -111,6 +116,8 @@ const YOUComponent = {
         Vue.component("u-table", TableComponent);
         Vue.component("u-card-cell", CardCellComponent);
         Vue.component("u-upload", UploadComponent);
+        Vue.component("u-manage-upload", ManageUploadComponent);
+        Vue.component("u-carousel", CarouselComponent);
         Vue.component("u-tag-group", TagGroupComponent);
         Vue.component("u-list", ListComponent);
         Vue.component("u-poptip", PoptipComponent);
@@ -139,6 +146,9 @@ const YOUComponent = {
         Vue.component("u-org-tree", OrgTreeComponent);
         Vue.component("u-resource", ResourceComponent);
         Vue.component("u-city", CityRegionComponent);
+        Vue.component("u-import", DataImportComponent);
+        Vue.component("u-result", ResultsComponent);
+        Vue.component("u-retrieval", RetrievalComponent);
     }
 };
 

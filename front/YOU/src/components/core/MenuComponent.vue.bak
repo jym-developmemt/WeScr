@@ -194,7 +194,7 @@ export default {
     },
 
     fetchData() {
-      // console.log(this.$route.path)
+      console.log(this.$route.path)
     }
   }
 };

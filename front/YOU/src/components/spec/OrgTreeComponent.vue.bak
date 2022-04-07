@@ -76,7 +76,7 @@ export default {
       if (this.detailModel) {
         return this.displayData;
       }
-      return ModelUtil.getModelKey(this, this.displayData, {});
+      return ModelUtil.getModelKey(this, this.displayData, "");
     },
   },
   methods: {
