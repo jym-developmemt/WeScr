@@ -8,6 +8,7 @@ package we.core.proc.resource;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,37 +59,36 @@ public class ImageBase64Process implements IProcess {
 	public Object execute(ProcessDto proceeDto, List<Object> resultList) throws Exception {
 		// 流程Key
 		String resourceId = proceeDto.getStringData1();
-		
-		//流程Key集合
+
+		// 流程Key集合
 		List<Map<String, Object>> resourceIdList = proceeDto.getListData1();
-		
-		if (StringUtils.hasText(resourceId) == false && resourceIdList.size() < 1 && resourceId=="undefined") {
+
+		if (StringUtils.hasText(resourceId) == false && resourceIdList.size() < 1 && resourceId == "undefined") {
 			logger.error("资源ID未输入。");
 			throw new FacadeException("s.common.error.param");
 		}
 
-		if (StringUtils.hasText(resourceId) == false ) {
-			//多条
-			List<Map<String, Object>> listRtn = new ArrayList<Map<String,Object>>();
-			
+		if (StringUtils.hasText(resourceId) == false) {
+			// 多条
+			List<Map<String, Object>> listRtn = new ArrayList<Map<String, Object>>();
+
 			for (Map<String, Object> map : resourceIdList) {
 				Object objResourceId = map.get("resource_id");
-				Map<String, Object> mapRtn = new HashMap<String, Object>(); 
+				Map<String, Object> mapRtn = new HashMap<String, Object>();
 				mapRtn.put("data", getImgData(proceeDto, CommonUtil.toString(objResourceId)));
 				mapRtn.put("resource_id", objResourceId);
 				listRtn.add(mapRtn);
 			}
 			return listRtn;
 		}
-		
+
 		if (resourceIdList == null || resourceIdList.size() < 1) {
-			//单条
+			// 单条
 			return getImgData(proceeDto, resourceId);
 		}
 		return null;
 	}
-	
-	
+
 	private Object getImgData(ProcessDto proceeDto, String resourceId) throws Exception {
 		// 图片高度
 		String height = proceeDto.getStringData2();
@@ -98,7 +98,7 @@ public class ImageBase64Process implements IProcess {
 		// 资源下载
 		ResourceInfoDto resourceInfoDto = new ResourceInfoDto();
 		resourceInfoDto.setResourceId(resourceId);
-		//查询资源表，跟资源类型没有关系
+		// 查询资源表，跟资源类型没有关系
 		ResourceInfoModel resourceInfo = resourceInfoFacade.download(resourceInfoDto);
 		Resource resource = applicationContext.getResource(resourceInfo.getResourcePath());
 		if (resource.exists() == false) {
@@ -152,8 +152,9 @@ public class ImageBase64Process implements IProcess {
 		ImageIO.write(bi, FilenameUtils.getExtension(resourceInfo.getResourceName()), baos);
 		byte[] bytes = baos.toByteArray();
 
-		sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
-		String data = encoder.encodeBuffer(bytes).trim();
+//		sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
+//		String data = encoder.encodeBuffer(bytes).trim();
+		String data = Base64.getEncoder().encodeToString(bytes).trim();
 		return "data:image/" + FilenameUtils.getExtension(resource.getFilename()) + ";base64," + data;
 	}
 }

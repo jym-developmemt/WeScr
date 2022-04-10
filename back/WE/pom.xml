@@ -51,6 +51,13 @@
 			<artifactId>spring-security-oauth2-autoconfigure</artifactId>
 			<version>2.1.6.RELEASE</version>
 		</dependency>
+		
+		<!-- 解决错误：Cannot invoke "java.lang.reflect.Method.invoke(Object, Object[])" because "com.sun.xml.bind.v2.runtime.reflect.opt.Injector.defineClass" is null -->
+		<dependency>
+        	<groupId>com.sun.xml.bind</groupId>
+        	<artifactId>jaxb-impl</artifactId>
+        	<version>2.3.1</version>
+    	</dependency>
 
 		<dependency>
 			<groupId>org.aspectj</groupId>
