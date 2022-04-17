@@ -183,6 +183,11 @@ core:
     
     #交易猫商品平台外部商家权限包
     #交易猫外部商家批量发布商品
-    JYM01: bacthPublishProcess   
+    JYM01: bacthPublishProcess
+    
+jym:
+  api_exec_enable: false
+    
+  
 
 
