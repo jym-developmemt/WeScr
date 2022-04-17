@@ -57,7 +57,7 @@ core:
   update-login-date: true
   
   #DES加密盐值(8位)
-  des-salt: wewewewe
+  des-salt: uwelcome
   #每次批量插入处理的最大件数(0:无限制)
   batch-insert-max-count: 100
   #文件上传路径(file:C:\TEMP_PATH,classpath:TEMP_PATH,WEB-INF\TEMP_PATH)
@@ -67,7 +67,7 @@ core:
   upload-type-path:
    #走马灯上传路径
    type3: file:F:\\suc\\ap\\ESS\\webclient\\ROOT_YJ\\static\\img
-   type4: 
+   type4: C:\jym_upload\
    type5:
    type6:
    type7:
@@ -181,5 +181,8 @@ core:
     WX05: orderqueryProcess
     WX06: refundqueryProcess
     
+    #交易猫商品平台外部商家权限包
+    #交易猫外部商家批量发布商品
+    JYM01: bacthPublishProcess   
 
 

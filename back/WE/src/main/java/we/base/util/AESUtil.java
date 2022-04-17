@@ -15,6 +15,13 @@ public class AESUtil {
 	/** 日志 */
 	protected static Logger logger = LoggerFactory.getLogger(AESUtil.class);
 
+	/**
+	 * 交易猫AES解码
+	 * 
+	 * @param content 解码内容
+	 * @param aesKey  解码密钥
+	 * @return
+	 */
 	public static String decrypt(String content, String aesKey) {
 		if (StringUtils.isBlank(content) || StringUtils.isBlank(aesKey)) {
 			logger.error("[AESUtil.decrypt] encrypt or key is empty");
@@ -33,6 +40,13 @@ public class AESUtil {
 		return null;
 	}
 
+	/**
+	 * 交易猫AES加密
+	 * 
+	 * @param content 加密内容
+	 * @param aesKey  加密密钥
+	 * @return
+	 */
 	public static String encrypt(String content, String aesKey) {
 
 		if (StringUtils.isBlank(content) || StringUtils.isBlank(aesKey)) {
