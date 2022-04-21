@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.website.dao.JymGoodsEntityDao">
+	
+	<resultMap id="GoodsEntityMap" type="we.website.model.jym.GoodsEntityModel">
+       	<!-- 商品主表详细基本属性 -->
+        <id column="mId" property="externalGoodsId"/>
+        <result column="mTitle" property="title"/>
+        <result column="mPrice" property="price"/>
+        <result column="mStorage" property="storage"/>
+        <result column="mDescription" property="description"/>
+        <result column="mServerInfoId" property="serverInfoId"/>
+        <result column="mSupportRetrieveCompensation" property="supportRetrieveCompensation"/>
+        <result column="mCanBargain" property="canBargain"/>
+        <result column="mCreateAt" property="createAt"/>
+        <result column="mUpdateAt" property="updateAt"/>
+        
+        <!--关联商品平台信息映射-->
+        <association property="serverInfoModel" javaType="we.website.model.jym.ServerInfoModel">
+            <id column="siId" property="id"/>
+            <result column="siSystem" property="system"/>
+            <result column="siGoodType" property="goodType"/>
+            <result column="siCid" property="cid"/>
+            <result column="siFirstCategoryId" property="firstCategoryId"/>
+            <result column="siFirstCategoryName" property="firstCategoryName"/>
+            <result column="siSecondCategoryId" property="secondCategoryId"/>
+            <result column="siSecondCategoryName" property="secondCategoryName"/>
+            <result column="siPatformId" property="platformId"/>
+            <result column="siClientId" property="clientId"/>
+            <result column="siGameId" property="gameId"/>
+            <result column="siServerId" property="serverId"/>
+            <result column="siServerName" property="serverName"/>
+        </association>
+    </resultMap>
+    
+    <select id="searchGoodsListById" parameterType="list" resultMap="GoodsEntityMap" >
+		SELECT 
+			mge.external_goods_id as mId
+			, mge.title as mTitle
+			, mge.price as mPrice
+			, mge.storage as mStorage
+			, mge.description as mDescription
+			, mge.server_info_id as mServerInfoId
+			, mge.support_retrieve_compensation as mSupportRetrieveCompensation
+			, mge.can_bargain as mCanBargain
+			, mge.create_at as mCreateAt
+			, mge.update_at as mUpdateAt
+			, fsi.system as siSystem
+			, fsi.good_type as siGoodType
+			, fsi.cid as siCid
+			, fsi.first_category_id as siFirstCategoryId
+			, fsi.first_category_name as siFirstCategoryName
+			, fsi.second_category_id as siSecondCategoryId
+			, fsi.second_category_name as siSecondCategoryName
+			, fsi.platform_id as siPatformId
+			, fsi.client_id as siClientId
+			, fsi.game_id as siGameId
+			, fsi.server_id as siServerId
+			, fsi.server_name as siServerName
+		FROM jym_m_goods_entity mge
+		LEFT JOIN jym_f_server_info fsi ON mge.server_info_id = fsi.id
+		WHERE 1=1 
+		<if test="list != null and list.size() > 0">
+			AND mge.external_goods_id in 
+			<foreach collection="list" item="externalId" index="index" open="(" close=")" separator=",">
+				#{externalId}
+			</foreach>
+		</if>
+	</select>
+
+</mapper>

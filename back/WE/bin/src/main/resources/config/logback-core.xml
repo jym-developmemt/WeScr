@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- 控制台日志 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[WE.S] %d{HH:mm:ss.SSS} [%-5p] %c{0}.%M\(%L\) | %m%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- 文件日志 -->
+	<appender name="DailyRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<FileNamePattern>/WELog/logs/log_wes.%d{yyyyMMdd}.%i.log</FileNamePattern>
+			<maxFileSize>100MB</maxFileSize>
+			<MaxHistory>30</MaxHistory>
+			<totalSizeCap>10GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[WE.S] %d{HH:mm:ss.SSS} [%-5p] %c{0}.%M\(%L\) | %m%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<!-- 级别1 -->
+	<logger name="org.springframework" level="WARNING" />
+	<logger name="org.apache.ibatis" level="WARNING" />
+	<logger name="we" level="DEBUG" />
+	<logger name="we.website.dao" level="DEBUG" />
+	<logger name="we.core.dao" level="DEBUG" />
+	<logger name="org.camunda" level="WARNING" />
+	<!-- 级别2 -->
+	<!-- <logger name="org.springframework" level="warning" /> -->
+	<!-- <logger name="org.apache.ibatis" level="warning" /> -->
+	<!-- <logger name="we" level="debug" /> -->
+	<!-- <logger name="we.website.dao" level="debug" /> -->
+	<!-- <logger name="we.core.dao" level="debug" /> -->
+	<!-- <logger name="org.camunda" level="debug" /> -->
+	
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="DailyRollingFile" />
+	</root>
+</configuration>

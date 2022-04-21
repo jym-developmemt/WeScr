@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.website.dao.DataSourceColumnDao">
+
+	<!-- 数据源列信息检索 -->
+	<select id="searchDataSourceColumn" parameterType="we.website.model.DataSourceColumnModel" resultType="we.website.model.DataSourceColumnModel" >
+		select datasource_id datasourceId
+			, column_index columnIndex
+			, column_id columnId
+			, display_name displayName
+			, primary_key primaryKey
+			, notnull notnull
+		from m_datasource_column
+		<where>
+			datasource_id = #{datasourceId}
+		</where>
+		order by column_index
+	</select>
+
+</mapper>

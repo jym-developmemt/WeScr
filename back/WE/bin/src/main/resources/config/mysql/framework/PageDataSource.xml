@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.website.dao.PageDataSourceDao">
+
+	<!-- 页面数据源信息取得 -->
+	<select id="findPageDataSource" parameterType="we.website.model.PageDataSourceModel" resultType="we.website.model.PageDataSourceModel">
+		select pd.group_id groupId
+			, pd.page_id pageId
+			, pd.datasource_index datasourceIndex
+			, pd.datasource_type datasourceType
+			, pd.datasource_id datasourceId
+			, pd.init_search_flg initSearchFlg
+			, pd.search_type searchType
+			, pd.search_condition searchCondition
+			, pd.page_size pageSize
+			, pd.datasource_addon datasourceAddon
+			, md.datasource_name datasourceName
+			, md.object_name objectName
+			, md.object_type objectType
+		from p_datasource_info pd
+		left join m_datasource_info md
+		on md.datasource_id = pd.datasource_id
+		and pd.datasource_type = '1'
+		<where>
+				pd.group_id = #{groupId}
+			and pd.page_id = #{pageId}
+			and pd.datasource_index = #{datasourceIndex}
+		</where>
+	</select>
+
+	<!-- 页面数据源信息检索 -->
+	<select id="searchPageDataSource" parameterType="we.website.model.PageDataSourceModel" resultType="we.website.model.PageDataSourceModel">
+		select pd.group_id groupId
+			, pd.page_id pageId
+			, pd.datasource_index datasourceIndex
+			, pd.datasource_type datasourceType
+			, pd.datasource_id datasourceId
+			, pd.init_search_flg initSearchFlg
+			, pd.search_type searchType
+			, pd.search_condition searchCondition
+			, pd.page_size pageSize
+			, pd.datasource_addon datasourceAddon
+			, md.datasource_name datasourceName
+			, md.object_name objectName
+			, md.object_type objectType
+		from p_datasource_info pd
+		left join m_datasource_info md
+		on md.datasource_id = pd.datasource_id
+		and pd.datasource_type = '1'
+		<where>
+			<if test="groupId != null and groupId != ''">
+				and pd.group_id = #{groupId}
+			</if>
+			<if test="pageId != null and pageId != ''">
+				and pd.page_id = #{pageId}
+			</if>
+		</where>
+		order by pd.datasource_index
+	</select>
+
+</mapper>

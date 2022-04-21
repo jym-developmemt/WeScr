@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.core.dao.DataSourceDataDao">
+
+	<!-- 查询数据 -->
+	<select id="findDataSourceData" parameterType="we.core.model.DataSourceDataModel" resultType="map">
+		SELECT
+			<include refid="selectSql" />
+		FROM ${tableName} ${aliasName}
+		<foreach collection="linkTableList" item="linkTable">
+			${linkTable.joinType} JOIN ${linkTable.tableName} ${linkTable.aliasName} ON
+			<foreach collection="linkConditionMap[linkTable.aliasName]" item="linkCondition" separator=" AND ">
+				<choose>
+					<when test="linkCondition.linkType == 9">
+						${linkTable.aliasName}.${linkCondition.columnId1} is null
+					</when>
+					<when test="linkCondition.linkType == 1">
+						${linkTable.aliasName}.${linkCondition.columnId1} = ${linkCondition.columnId2}
+					</when>
+					<otherwise>
+						${aliasName}.${linkCondition.columnId2} = ${linkTable.aliasName}.${linkCondition.columnId1}
+					</otherwise>
+				</choose>
+			</foreach>
+			<if test="linkColumnInputConditionMap[linkTable.aliasName] != null">
+				<foreach collection="linkColumnInputConditionMap[linkTable.aliasName]" item="whereClause">
+					<include refid="linkConditionSql" />
+				</foreach>
+			</if>
+		</foreach>
+		<where>
+			<foreach collection="existTableList" item="existTable" separator=" AND ">
+				EXISTS (
+					SELECT 1
+					FROM ${existTable.tableName} ${existTable.aliasName}
+					<where>
+						<foreach collection="linkConditionMap[existTable.aliasName]" item="linkCondition" separator=" AND ">
+							<choose>
+								<when test="linkCondition.linkType == 9">
+									${existTable.aliasName}.${linkCondition.columnId1} is null
+								</when>
+								<when test="linkCondition.linkType == 1">
+									${existTable.aliasName}.${linkCondition.columnId1} = ${linkCondition.columnId2}
+								</when>
+								<otherwise>
+									${aliasName}.${linkCondition.columnId2} = ${existTable.aliasName}.${linkCondition.columnId1}
+								</otherwise>
+							</choose>
+						</foreach>
+						<if test="linkColumnInputConditionMap[existTable.aliasName] != null">
+							<foreach collection="linkColumnInputConditionMap[existTable.aliasName]" item="whereClause">
+								<include refid="linkConditionSql" />
+							</foreach>
+						</if>
+					</where>
+				)
+			</foreach>
+			<include refid="conditionSql" />
+		</where>
+	</select>
+
+	<!-- 查询数据 -->
+	<select id="searchDataSourceData" parameterType="we.core.model.DataSourceDataModel" resultType="map">
+		SELECT
+			<include refid="selectSql" />
+		FROM ${tableName} ${aliasName}
+		<foreach collection="linkTableList" item="linkTable">
+			${linkTable.joinType} JOIN ${linkTable.tableName} ${linkTable.aliasName} ON
+			<foreach collection="linkConditionMap[linkTable.aliasName]" item="linkCondition" separator=" AND ">
+				<choose>
+					<when test="linkCondition.linkType == 9">
+						${linkTable.aliasName}.${linkCondition.columnId1} is null
+					</when>
+					<when test="linkCondition.linkType == 1">
+						${linkTable.aliasName}.${linkCondition.columnId1} = ${linkCondition.columnId2}
+					</when>
+					<otherwise>
+						${aliasName}.${linkCondition.columnId2} = ${linkTable.aliasName}.${linkCondition.columnId1}
+					</otherwise>
+				</choose>
+			</foreach>
+			<if test="linkColumnInputConditionMap[linkTable.aliasName] != null">
+				<foreach collection="linkColumnInputConditionMap[linkTable.aliasName]" item="whereClause">
+					<include refid="linkConditionSql" />
+				</foreach>
+			</if>
+		</foreach>
+		<where>
+			<foreach collection="existTableList" item="existTable" separator=" AND ">
+				EXISTS (
+					SELECT 1
+					FROM ${existTable.tableName} ${existTable.aliasName}
+					<where>
+						<foreach collection="linkConditionMap[existTable.aliasName]" item="linkCondition" separator=" AND ">
+							<choose>
+								<when test="linkCondition.linkType == 9">
+									${existTable.aliasName}.${linkCondition.columnId1} is null
+								</when>
+								<when test="linkCondition.linkType == 1">
+									${existTable.aliasName}.${linkCondition.columnId1} = ${linkCondition.columnId2}
+								</when>
+								<otherwise>
+									${aliasName}.${linkCondition.columnId2} = ${existTable.aliasName}.${linkCondition.columnId1}
+								</otherwise>
+							</choose>
+						</foreach>
+						<if test="linkColumnInputConditionMap[existTable.aliasName] != null">
+							<foreach collection="linkColumnInputConditionMap[existTable.aliasName]" item="whereClause">
+								<include refid="linkConditionSql" />
+							</foreach>
+						</if>
+					</where>
+				)
+			</foreach>
+			<include refid="conditionSql" />
+		</where>
+		<foreach collection="columnList3" item="orderClause" open="ORDER BY " separator=",">
+			<choose>
+				<when test="orderClause.orderMethod == 'asc_null'">
+					if(isnull(${orderClause.aliasName}.${orderClause.columnId}),1,0), ${orderClause.aliasName}.${orderClause.columnId} asc
+				</when>
+				<when test="orderClause.orderMethod == 'desc_null'">
+					if(isnull(${orderClause.aliasName}.${orderClause.columnId}),0,1), ${orderClause.aliasName}.${orderClause.columnId} desc
+				</when>
+				<when test="orderClause.orderMethod == 'asc_number'">
+					cast(${orderClause.aliasName}.${orderClause.columnId} as decimal(20,4)) asc
+				</when>
+				<when test="orderClause.orderMethod == 'desc_number'">
+					cast(${orderClause.aliasName}.${orderClause.columnId} as decimal(20,4)) desc
+				</when>
+				<otherwise>
+					${orderClause.aliasName}.${orderClause.columnId} <if test="orderClause.orderMethod != null and orderClause.orderMethod != ''">${orderClause.orderMethod}</if>
+				</otherwise>
+			</choose>
+		</foreach>
+	</select>
+
+	<!-- 取得查询对应数据件数 -->
+	<select id="countDataSourceData" parameterType="we.core.model.DataSourceDataModel" resultType="int">
+		SELECT COUNT(1)
+		FROM ${tableName} ${aliasName}
+		<foreach collection="linkTableList" item="linkTable">
+			${linkTable.joinType} JOIN ${linkTable.tableName} ${linkTable.aliasName} ON
+			<foreach collection="linkConditionMap[linkTable.aliasName]" item="linkCondition" separator=" AND ">
+				<choose>
+					<when test="linkCondition.linkType == 9">
+						${linkTable.aliasName}.${linkCondition.columnId1} is null
+					</when>
+					<when test="linkCondition.linkType == 1">
+						${linkTable.aliasName}.${linkCondition.columnId1} = ${linkCondition.columnId2}
+					</when>
+					<otherwise>
+						${aliasName}.${linkCondition.columnId2} = ${linkTable.aliasName}.${linkCondition.columnId1}
+					</otherwise>
+				</choose>
+			</foreach>
+			<if test="linkColumnInputConditionMap[linkTable.aliasName] != null">
+				<foreach collection="linkColumnInputConditionMap[linkTable.aliasName]" item="whereClause">
+					<include refid="linkConditionSql" />
+				</foreach>
+			</if>
+		</foreach>
+		<where>
+			<foreach collection="existTableList" item="existTable" separator=" AND ">
+				EXISTS (
+					SELECT 1
+					FROM ${existTable.tableName} ${existTable.aliasName}
+					<where>
+						<foreach collection="linkConditionMap[existTable.aliasName]" item="linkCondition" separator=" AND ">
+							<choose>
+								<when test="linkCondition.linkType == 9">
+									${existTable.aliasName}.${linkCondition.columnId1} is null
+								</when>
+								<when test="linkCondition.linkType == 1">
+									${existTable.aliasName}.${linkCondition.columnId1} = ${linkCondition.columnId2}
+								</when>
+								<otherwise>
+									${aliasName}.${linkCondition.columnId2} = ${existTable.aliasName}.${linkCondition.columnId1}
+								</otherwise>
+							</choose>
+						</foreach>
+						<if test="linkColumnInputConditionMap[existTable.aliasName] != null">
+							<foreach collection="linkColumnInputConditionMap[existTable.aliasName]" item="whereClause">
+								<include refid="linkConditionSql" />
+							</foreach>
+						</if>
+					</where>
+				)
+			</foreach>
+			<include refid="conditionSql" />
+		</where>
+	</select>
+
+	<!-- 取得查询对应分页数据 -->
+	<select id="pagingDataSourceData" parameterType="we.core.model.DataSourceDataModel" resultType="map">
+		SELECT
+			<include refid="selectSql" />
+		FROM ${tableName} ${aliasName}
+		<foreach collection="linkTableList" item="linkTable">
+			${linkTable.joinType} JOIN ${linkTable.tableName} ${linkTable.aliasName} ON
+			<foreach collection="linkConditionMap[linkTable.aliasName]" item="linkCondition" separator=" AND ">
+				<choose>
+					<when test="linkCondition.linkType == 9">
+						${linkTable.aliasName}.${linkCondition.columnId1} is null
+					</when>
+					<when test="linkCondition.linkType == 1">
+						${linkTable.aliasName}.${linkCondition.columnId1} = ${linkCondition.columnId2}
+					</when>
+					<otherwise>
+						${aliasName}.${linkCondition.columnId2} = ${linkTable.aliasName}.${linkCondition.columnId1}
+					</otherwise>
+				</choose>
+			</foreach>
+			<if test="linkColumnInputConditionMap[linkTable.aliasName] != null">
+				<foreach collection="linkColumnInputConditionMap[linkTable.aliasName]" item="whereClause">
+					<include refid="linkConditionSql" />
+				</foreach>
+			</if>
+		</foreach>
+		<where>
+			<foreach collection="existTableList" item="existTable" separator=" AND ">
+				EXISTS (
+					SELECT 1
+					FROM ${existTable.tableName} ${existTable.aliasName}
+					<where>
+						<foreach collection="linkConditionMap[existTable.aliasName]" item="linkCondition" separator=" AND ">
+							<choose>
+								<when test="linkCondition.linkType == 9">
+									${existTable.aliasName}.${linkCondition.columnId1} is null
+								</when>
+								<when test="linkCondition.linkType == 1">
+									${existTable.aliasName}.${linkCondition.columnId1} = ${linkCondition.columnId2}
+								</when>
+								<otherwise>
+									${aliasName}.${linkCondition.columnId2} = ${existTable.aliasName}.${linkCondition.columnId1}
+								</otherwise>
+							</choose>
+						</foreach>
+						<if test="linkColumnInputConditionMap[existTable.aliasName] != null">
+							<foreach collection="linkColumnInputConditionMap[existTable.aliasName]" item="whereClause">
+								<include refid="linkConditionSql" />
+							</foreach>
+						</if>
+					</where>
+				)
+			</foreach>
+			<include refid="conditionSql" />
+		</where>
+		<foreach collection="columnList3" item="orderClause" open="ORDER BY " separator=",">
+			<choose>
+				<when test="orderClause.orderMethod == 'asc_null'">
+					if(isnull(${orderClause.aliasName}.${orderClause.columnId}),1,0), ${orderClause.aliasName}.${orderClause.columnId} asc
+				</when>
+				<when test="orderClause.orderMethod == 'desc_null'">
+					if(isnull(${orderClause.aliasName}.${orderClause.columnId}),0,1), ${orderClause.aliasName}.${orderClause.columnId} desc
+				</when>
+				<when test="orderClause.orderMethod == 'asc_number'">
+					cast(${orderClause.aliasName}.${orderClause.columnId} as decimal(20,4)) asc
+				</when>
+				<when test="orderClause.orderMethod == 'desc_number'">
+					cast(${orderClause.aliasName}.${orderClause.columnId} as decimal(20,4)) desc
+				</when>
+				<otherwise>
+					${orderClause.aliasName}.${orderClause.columnId} <if test="orderClause.orderMethod != null and orderClause.orderMethod != ''">${orderClause.orderMethod}</if>
+				</otherwise>
+			</choose>
+		</foreach>
+		LIMIT #{startNum}, #{pageSize}
+	</select>
+
+	<!-- 检索项目 -->
+	<sql id="selectSql">
+		<foreach collection="columnList1" item="selectColumn" separator="," >
+			<choose>
+				<when test="selectColumn.statisticsType == 1">
+					sum(${selectColumn.aliasName}.${selectColumn.columnId}) ${selectColumn.columnId}
+				</when>
+				<when test="selectColumn.statisticsType == 2">
+					min(${selectColumn.aliasName}.${selectColumn.columnId}) ${selectColumn.columnId}
+				</when>
+				<when test="selectColumn.statisticsType == 3">
+					max(${selectColumn.aliasName}.${selectColumn.columnId}) ${selectColumn.columnId}
+				</when>
+				<when test="selectColumn.statisticsType == 4">
+					count(${selectColumn.aliasName}.${selectColumn.columnId}) ${selectColumn.columnId}
+				</when>
+				<when test="selectColumn.statisticsType == 5">
+					avg(${selectColumn.aliasName}.${selectColumn.columnId}) ${selectColumn.columnId}
+				</when>
+				<otherwise>
+					${selectColumn.aliasName}.${selectColumn.columnId}
+				</otherwise>
+			</choose>
+
+		</foreach>
+	</sql>
+
+	<!-- 检索条件 -->
+	<sql id="conditionSql">
+		<foreach collection="columnList2" item="whereClause">
+			${condConcatType}
+			<choose>
+				<when test="whereClause.conditionType == 1">
+					${whereClause.aliasName}.${whereClause.columnId} LIKE CONCAT('%', #{conditionParam.${whereClause.conditionColumnId}}, '%')
+				</when>
+				<when test="whereClause.conditionType == 2">
+					${whereClause.aliasName}.${whereClause.columnId} LIKE CONCAT(#{conditionParam.${whereClause.conditionColumnId}}, '%')
+				</when>
+				<when test="whereClause.conditionType == 3">
+					${whereClause.aliasName}.${whereClause.columnId} &lt;&gt; #{conditionParam.${whereClause.conditionColumnId}}
+				</when>
+				<when test="whereClause.conditionType == 4">
+					${whereClause.aliasName}.${whereClause.columnId} &lt; #{conditionParam.${whereClause.conditionColumnId}}
+				</when>
+				<when test="whereClause.conditionType == 34">
+					(${whereClause.aliasName}.${whereClause.columnId} &lt; #{conditionParam.${whereClause.conditionColumnId}} OR ${whereClause.aliasName}.${whereClause.columnId} IS NULL)
+				</when>
+				<when test="whereClause.conditionType == 5">
+					${whereClause.aliasName}.${whereClause.columnId} &gt; #{conditionParam.${whereClause.conditionColumnId}}
+				</when>
+				<when test="whereClause.conditionType == 35">
+					(${whereClause.aliasName}.${whereClause.columnId} &gt; #{conditionParam.${whereClause.conditionColumnId}} OR ${whereClause.aliasName}.${whereClause.columnId} IS NULL)
+				</when>
+				<when test="whereClause.conditionType == 6">
+					${whereClause.aliasName}.${whereClause.columnId} &lt;= #{conditionParam.${whereClause.conditionColumnId}}
+				</when>
+				<when test="whereClause.conditionType == 36">
+					(${whereClause.aliasName}.${whereClause.columnId} &lt;= #{conditionParam.${whereClause.conditionColumnId}} OR ${whereClause.aliasName}.${whereClause.columnId} IS NULL)
+				</when>
+				<when test="whereClause.conditionType == 7">
+					${whereClause.aliasName}.${whereClause.columnId} &gt;= #{conditionParam.${whereClause.conditionColumnId}}
+				</when>
+				<when test="whereClause.conditionType == 37">
+					(${whereClause.aliasName}.${whereClause.columnId} &gt;= #{conditionParam.${whereClause.conditionColumnId}} OR ${whereClause.aliasName}.${whereClause.columnId} IS NULL)
+				</when>
+				<when test="whereClause.conditionType == 8">
+					(${whereClause.aliasName}.${whereClause.columnId} = #{conditionParam.${whereClause.conditionColumnId}} OR ${aliasName}.${whereClause.columnId} IS NULL)
+				</when>
+				<when test="whereClause.conditionType == 9">
+					${whereClause.aliasName}.${whereClause.columnId} in (${conditionParam[whereClause.conditionColumnId]})
+				</when>
+				<when test="whereClause.conditionType == 10">
+					${whereClause.aliasName}.${whereClause.columnId} IS NOT NULL
+				</when>
+				<when test="whereClause.conditionType == 11">
+					${whereClause.aliasName}.${whereClause.columnId} IS NULL
+				</when>
+				<when test="whereClause.conditionType == 12">
+					(
+						${whereClause.aliasName}.${whereClause.columnId} &gt;= SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', 1)
+					AND ${whereClause.aliasName}.${whereClause.columnId} &lt;= SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', -1)
+					)
+				</when>
+				<when test="whereClause.conditionType == 13">
+					(
+						${whereClause.aliasName}.${whereClause.columnId} &gt; SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', 1)
+					AND ${whereClause.aliasName}.${whereClause.columnId} &lt;= SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', -1)
+					)
+				</when>
+				<when test="whereClause.conditionType == 14">
+					(
+						${whereClause.aliasName}.${whereClause.columnId} &gt;= SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', 1)
+					AND ${whereClause.aliasName}.${whereClause.columnId} &lt; SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', -1)
+					)
+				</when>
+				<when test="whereClause.conditionType == 15">
+					(
+						${whereClause.aliasName}.${whereClause.columnId} &gt; SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', 1)
+					AND ${whereClause.aliasName}.${whereClause.columnId} &lt; SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', -1)
+					)
+				</when>
+				<when test="whereClause.conditionType == 16">
+					(
+						${whereClause.aliasName}.${whereClause.columnId} &lt;&gt; #{conditionParam.${whereClause.conditionColumnId}}
+					 OR ${whereClause.aliasName}.${whereClause.columnId} IS NULL
+					)
+				</when>
+				<when test="whereClause.conditionType == 17">
+					(
+						${whereClause.aliasName}.${whereClause.columnId} &gt;= CAST(#{conditionParam.${whereClause.conditionColumnId}} as signed)
+					)
+				</when>
+				<when test="whereClause.conditionType == 18">
+					(
+						${whereClause.aliasName}.${whereClause.columnId} &lt;= CAST(#{conditionParam.${whereClause.conditionColumnId}} as signed)
+					)
+				</when>
+				<when test="whereClause.conditionType == 41">
+					SUBSTRING(${whereClause.aliasName}.${whereClause.columnId},1,5) in (${conditionParam[whereClause.conditionColumnId]})
+				</when>
+				<when test="whereClause.conditionType == 50">
+					<foreach collection="${conditionParam[whereClause.conditionColumnId]}" item="mangeInfo" open="(" close=")" separator=" or ">
+						<if test="mangeInfo.manageType == 1">
+							${whereClause.aliasName}.${whereClause.columnId} = #{mangeInfo.departmentId}
+						</if>
+						<if test="mangeInfo.manageType == 2">
+							${whereClause.aliasName}.${whereClause.columnId} like concat(#{mangeInfo.departmentId}, '_%')
+						</if>
+						<if test="mangeInfo.manageType == 3">
+							${whereClause.aliasName}.${whereClause.columnId} like concat(#{mangeInfo.departmentId}, '%')
+						</if>
+					</foreach>
+				</when>
+				<otherwise>
+					${whereClause.aliasName}.${whereClause.columnId} = #{conditionParam.${whereClause.conditionColumnId}}
+				</otherwise>
+			</choose>
+		</foreach>
+	</sql>
+
+	<!-- 检索条件 -->
+	<sql id="linkConditionSql">
+		AND
+		<choose>
+			<when test="whereClause.conditionType == 1">
+				${whereClause.aliasName}.${whereClause.columnId} LIKE CONCAT('%', #{conditionParam.${whereClause.conditionColumnId}}, '%')
+			</when>
+			<when test="whereClause.conditionType == 2">
+				${whereClause.aliasName}.${whereClause.columnId} LIKE CONCAT(#{conditionParam.${whereClause.conditionColumnId}}, '%')
+			</when>
+			<when test="whereClause.conditionType == 3">
+				${whereClause.aliasName}.${whereClause.columnId} &lt;&gt; #{conditionParam.${whereClause.conditionColumnId}}
+			</when>
+			<when test="whereClause.conditionType == 4">
+				${whereClause.aliasName}.${whereClause.columnId} &lt; #{conditionParam.${whereClause.conditionColumnId}}
+			</when>
+			<when test="whereClause.conditionType == 5">
+				${whereClause.aliasName}.${whereClause.columnId} &gt; #{conditionParam.${whereClause.conditionColumnId}}
+			</when>
+			<when test="whereClause.conditionType == 6">
+				${whereClause.aliasName}.${whereClause.columnId} &lt;= #{conditionParam.${whereClause.conditionColumnId}}
+			</when>
+			<when test="whereClause.conditionType == 7">
+				${whereClause.aliasName}.${whereClause.columnId} &gt;= #{conditionParam.${whereClause.conditionColumnId}}
+			</when>
+			<when test="whereClause.conditionType == 8">
+				(${whereClause.aliasName}.${whereClause.columnId} = #{conditionParam.${whereClause.conditionColumnId}} OR ${aliasName}.${whereClause.columnId} IS NULL)
+			</when>
+			<when test="whereClause.conditionType == 9">
+				${whereClause.aliasName}.${whereClause.columnId} in (${conditionParam[whereClause.conditionColumnId]})
+			</when>
+			<when test="whereClause.conditionType == 10">
+				${whereClause.aliasName}.${whereClause.columnId} IS NOT NULL
+			</when>
+			<when test="whereClause.conditionType == 11">
+				${whereClause.aliasName}.${whereClause.columnId} IS NULL
+			</when>
+			<when test="whereClause.conditionType == 12">
+				(
+					${whereClause.aliasName}.${whereClause.columnId} &gt;= SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', 1)
+				AND ${whereClause.aliasName}.${whereClause.columnId} &lt;= SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', -1)
+				)
+			</when>
+			<when test="whereClause.conditionType == 13">
+				(
+					${whereClause.aliasName}.${whereClause.columnId} &gt; SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', 1)
+				AND ${whereClause.aliasName}.${whereClause.columnId} &lt;= SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', -1)
+				)
+			</when>
+			<when test="whereClause.conditionType == 14">
+				(
+					${whereClause.aliasName}.${whereClause.columnId} &gt;= SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', 1)
+				AND ${whereClause.aliasName}.${whereClause.columnId} &lt; SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', -1)
+				)
+			</when>
+			<when test="whereClause.conditionType == 15">
+				(
+					${whereClause.aliasName}.${whereClause.columnId} &gt; SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', 1)
+				AND ${whereClause.aliasName}.${whereClause.columnId} &lt; SUBSTRING_INDEX(#{conditionParam.${whereClause.conditionColumnId}}, ',', -1)
+				)
+			</when>
+			<otherwise>
+				${whereClause.aliasName}.${whereClause.columnId} = #{conditionParam.${whereClause.conditionColumnId}}
+			</otherwise>
+		</choose>
+	</sql>
+
+	<!-- 登录数据 -->
+	<insert id="insertDataSourceData" parameterType="we.core.model.DataSourceDataModel">
+		INSERT INTO ${tableName} (
+		<foreach collection="columnList1" item="insertColumn" separator=",">
+			${insertColumn.columnId}
+		</foreach>
+		) VALUES (
+		<foreach collection="columnList1" item="valueColumn" separator=",">
+			#{dataParam.${valueColumn.columnId}}
+		</foreach>
+		)
+	</insert>
+
+	<!-- 登录数据 -->
+	<insert id="batchInsertDataSourceData" parameterType="we.core.model.DataSourceDataModel">
+		INSERT INTO ${tableName} (
+		<foreach collection="columnList1" item="insertColumn" separator=",">
+			${insertColumn.columnId}
+		</foreach>
+		) VALUES
+		<foreach collection="dataParamList" item="insertData" separator=",">
+			(
+				<foreach collection="columnList1" item="valueColumn" separator=",">
+					#{insertData.${valueColumn.columnId}}
+				</foreach>
+			)
+		</foreach>
+	</insert>
+
+	<!-- 更新数据 -->
+	<update id="updateDataSourceData" parameterType="we.core.model.DataSourceDataModel">
+		UPDATE ${tableName}
+		<set>
+			<foreach collection="columnList1" item="updateColumn" separator="," >
+				${updateColumn.columnId} = #{dataParam.${updateColumn.columnId}}
+			</foreach>
+		</set>
+		<where>
+			<foreach collection="columnList2" item="whereClause">
+				AND ${whereClause.columnId} = #{conditionParam.${whereClause.columnId}}
+			</foreach>
+		</where>
+	</update>
+
+	<!-- 删除数据 -->
+	<delete id="deleteDataSourceData" parameterType="we.core.model.DataSourceDataModel">
+		DELETE FROM ${tableName}
+		<where>
+			<foreach collection="columnList2" item="whereClause">
+				AND ${whereClause.columnId} = #{conditionParam.${whereClause.columnId}}
+			</foreach>
+		</where>
+	</delete>
+
+</mapper>

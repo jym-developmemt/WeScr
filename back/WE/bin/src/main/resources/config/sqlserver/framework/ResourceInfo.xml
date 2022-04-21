@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.website.dao.ResourceInfoDao">
+
+	<!-- 追加资源信息 -->
+	<insert id="addResourceInfo" parameterType="we.website.model.ResourceInfoModel">
+		insert into m_resource_info (
+			  resource_id
+			, resource_name
+			, resource_type
+			, resource_path
+			, auth_type
+			, auth_value
+			, temp_flg
+			, updated_date
+			, updated_by
+		) values (
+			  #{resourceId}
+			, #{resourceName}
+			, #{resourceType}
+			, #{resourcePath}
+			, #{authType}
+			, #{authValue}
+			, #{tempFlg}
+			, getdate()
+			, #{loginUser}
+		)
+	</insert>
+
+	<!-- 更新资源信息 -->
+	<update id="updateResourceInfo" parameterType="we.website.model.ResourceInfoModel">
+		update m_resource_info
+		<set>
+			<if test="resourceName != null and resourceName != ''">
+			  resource_name = #{resourceName}
+			</if>
+			<if test="resourceType != null and resourceType != ''">
+			, resource_type = #{resourceType}
+			</if>
+			<if test="resourcePath != null and resourcePath != ''">
+			, resource_path = #{resourcePath}
+			</if>
+			<if test="tempFlg != null and tempFlg != ''">
+			, temp_flg = #{tempFlg}
+			</if>
+			, updated_date = getdate()
+			, updated_by = #{loginUser}
+		</set>
+		<where>
+			resource_id = #{resourceId}
+		</where>
+	</update>
+
+	<!-- 删除资源信息 -->
+	<delete id="deleteResourceInfo" parameterType="String">
+		delete from m_resource_info
+		<where>
+			resource_id = #{resourceId}
+		</where>
+	</delete>
+
+	<!-- 资源信息取得 -->
+	<select id="findResourceInfo" parameterType="String" resultType="we.website.model.ResourceInfoModel">
+		select resource_id resourceId
+			, resource_name resourceName
+			, resource_type resourceType
+			, resource_path resourcePath
+			, auth_type authType
+			, auth_value authValue
+		from m_resource_info
+		<where>
+			resource_id = #{resourceId}
+		</where>
+	</select>
+
+
+	<!-- 资源信息取得 -->
+	<select id="searchExpiredResource" resultType="we.website.model.ResourceInfoModel">
+		select resource_id resourceId
+			, resource_name resourceName
+			, resource_type resourceType
+			, resource_path resourcePath
+			, auth_type authType
+			, auth_value authValue
+		from m_resource_info
+		<where>
+			temp_flg = '0'
+			and updated_date &lt; DATEADD(hh, -12, getdate())
+		</where>
+	</select>
+
+</mapper>

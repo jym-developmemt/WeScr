@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.core.dao.BpmnModelDao">
+
+	<!-- 站点信息取得 -->
+	<select id="findBpmnModel" parameterType="String" resultType="we.core.model.BpmnModel">
+		select model_id modelId
+			, model_name modelName
+			, model_comment modelComment
+			, resource_id resourceId
+		from f_bpmn_model
+		<where>
+			model_id = #{modelId}
+		</where>
+	</select>
+
+</mapper>
