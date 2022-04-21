@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.core.dao.ApplyFlowDao">
+
+	<!-- 申请基本信息取得 -->
+	<select id="findApplyInfo" parameterType="we.core.model.ApplyInfoModel" resultType="we.core.model.ApplyInfoModel">
+		select version_id versionId
+			, apply_id applyId
+			, apply_name applyName
+			, apply_comment applyComment
+			, apply_icon applyIcon
+			, notice_flg noticeFlg
+			, title_expression titleExpression
+			, comment_expression commentExpression
+			, apply_page_id applyPageId
+			, modify_page_id modifyPageId
+			, approval_page_id approvalPageId
+			, mobile_apply_page_id mobileApplyPageId
+			, mobile_modify_page_id mobileModifyPageId
+			, mobile_approval_page_id mobileApprovalPageId
+			, update_datasource_id updateDatasourceId
+			, instance_id_column_index instanceIdColumnIndex
+			, status_column_index statusColumnIndex
+			, auth_user authUser
+			, auth_user_name authUserName
+			, auth_department authDepartment
+			, auth_department_name authDepartmentName
+		from f_apply_info
+		<where>
+				version_id = #{versionId}
+			and apply_id = #{applyId}
+		</where>
+	</select>
+
+	<!-- 申请基本信息检索 -->
+	<select id="searchApplyInfo" parameterType="we.core.model.ApplyInfoModel" resultType="we.core.model.ApplyInfoModel">
+		select version_id versionId
+			, apply_id applyId
+			, apply_name applyName
+			, apply_comment applyComment
+			, apply_icon applyIcon
+			, notice_flg noticeFlg
+			, title_expression titleExpression
+			, comment_expression commentExpression
+			, apply_page_id applyPageId
+			, modify_page_id modifyPageId
+			, approval_page_id approvalPageId
+			, mobile_apply_page_id mobileApplyPageId
+			, mobile_modify_page_id mobileModifyPageId
+			, mobile_approval_page_id mobileApprovalPageId
+			, update_datasource_id updateDatasourceId
+			, instance_id_column_index instanceIdColumnIndex
+			, status_column_index statusColumnIndex
+			, auth_user authUser
+			, auth_user_name authUserName
+			, auth_department authDepartment
+			, auth_department_name authDepartmentName
+		from f_apply_info
+		<where>
+			<if test="versionId != null and versionId != ''">
+				and version_id = #{versionId}
+			</if>
+			<if test="applyId != null and applyId != ''">
+				and apply_id = #{applyId}
+			</if>
+			<if test="applyName != null and applyName != ''">
+				and apply_name = #{applyName}
+			</if>
+		</where>
+	</select>
+
+	<!-- 流程条件信息检索 -->
+	<select id="searchConditionInfo" parameterType="we.core.model.ApplyInfoModel" resultType="we.core.model.ConditionInfoModel">
+		select version_id versionId
+			, apply_id applyId
+			, condition_id conditionId
+			, item_name itemName
+			, item_type itemType
+			, item_key itemKey
+			, options options
+		from f_condition_info
+		<where>
+				version_id = #{versionId}
+			and apply_id = #{applyId}
+		</where>
+	</select>
+
+	<!-- 审批流程条件检索 -->
+	<select id="searchFlowCondition" parameterType="we.core.model.ApplyInfoModel" resultType="we.core.model.FlowConditionModel">
+		select version_id versionId
+			, apply_id applyId
+			, flow_index flowIndex
+			, condition_index conditionIndex
+			, condition_name conditionName
+			, condition_id conditionId
+			, condition_type conditionType
+			, condition_value conditionValue
+		from f_apply_flow_condition
+		<where>
+				version_id = #{versionId}
+			and apply_id = #{applyId}
+		</where>
+		order by flow_index, condition_index
+	</select>
+
+	<!-- 审批流程信息检索 -->
+	<select id="searchApplyFlow" parameterType="we.core.model.ApplyFlowModel" resultType="we.core.model.ApplyFlowModel">
+		select version_id versionId
+			, apply_id applyId
+			, flow_index flowIndex
+			, step_index stepIndex
+			, step_name stepName
+			, approval_type approvalType
+			, auth_type authType
+			, auth_value authValue
+			, auth_name authName
+		from f_apply_flow
+		<where>
+				version_id = #{versionId}
+			and apply_id = #{applyId}
+			and flow_index = #{flowIndex}
+			<if test="stepIndex > -1">
+				and step_index = #{stepIndex}
+			</if>
+		</where>
+		order by step_index
+	</select>
+
+</mapper>

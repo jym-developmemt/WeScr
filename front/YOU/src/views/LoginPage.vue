@@ -29,6 +29,7 @@
                     v-model="formItem.userId"
                     :placeholder="$t('s.user.login.user_id')"
                     :disabled="this.$store.getters.isLoading"
+                    @on-enter="login"
                   >
                     <Icon class="icon" type="ios-person" slot="prepend"></Icon>
                   </Input>
@@ -39,6 +40,7 @@
                     v-model="formItem.password"
                     :placeholder="$t('s.user.login.password')"
                     :disabled="this.$store.getters.isLoading"
+                    @on-enter="login"
                   >
                     <Icon class="icon" type="ios-lock" slot="prepend"></Icon>
                   </Input>

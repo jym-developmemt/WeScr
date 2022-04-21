@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.website.dao.DepartmentInfoDao">
+
+	<!-- 上级部门信息取得 -->
+	<select id="findDepartmentInfo" parameterType="we.website.model.DepartmentInfoModel" resultType="we.website.model.DepartmentInfoModel">
+		select version_id versionId
+			, department_id departmentId
+			, department_no departmentNo
+			, department_name departmentName
+			, short_name shortName
+			, parent_id parentId
+			, department_rank departmentRank
+		from m_department_info
+		<where>
+			<if test="versionId != null and versionId != ''">
+				and version_id = #{versionId}
+			</if>
+			<if test="departmentId != null and departmentId != ''">
+				and department_id = #{departmentId}
+			</if>
+			<if test="departmentNo != null and departmentNo != ''">
+				and department_no = #{departmentNo}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId}
+			</if>
+			<if test="parentIdPrefix != null and parentIdPrefix != ''">
+				and department_id like concat(#{parentIdPrefix}, '%')
+			</if>
+			<if test="parentIdSuffix != null and parentIdSuffix != ''">
+				and #{parentIdSuffix} like concat(department_id, '%')
+			</if>
+			<if test="departmentRank != null and departmentRank != ''">
+				and department_rank = #{departmentRank}
+			</if>
+		</where>
+	</select>
+
+	<!-- 部门信息取得 -->
+	<select id="selectDepartmentInfo" parameterType="we.website.model.DepartmentInfoModel" resultType="we.website.model.DepartmentInfoModel">
+		select version_id versionId
+			, department_id departmentId
+			, department_no departmentNo
+			, department_name departmentName
+			, short_name shortName
+			, parent_id parentId
+			, department_rank departmentRank
+		from m_department_info
+		<where>
+			<if test="versionId != null and versionId != ''">
+				and version_id = #{versionId}
+			</if>
+			<if test="departmentId != null and departmentId != ''">
+				and department_id = #{departmentId}
+			</if>
+			<if test="departmentNo != null and departmentNo != ''">
+				and department_no = #{departmentNo}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				and parent_id = #{parentId}
+			</if>
+			<if test="parentIdPrefix != null and parentIdPrefix != ''">
+				and department_id like concat(#{parentIdPrefix}, '%')
+			</if>
+			<if test="parentIdSuffix != null and parentIdSuffix != ''">
+				and #{parentIdSuffix} like concat(department_id, '%')
+			</if>
+			<if test="departmentRank != null and departmentRank != ''">
+				and department_rank = #{departmentRank}
+			</if>
+		</where>
+	</select>
+
+</mapper>

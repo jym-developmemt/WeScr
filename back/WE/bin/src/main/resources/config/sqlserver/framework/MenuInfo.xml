@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.website.dao.MenuInfoDao">
+
+	<!-- 菜单信息一览取得 -->
+	<select id="searchMenuInfoList" parameterType="we.website.model.MenuInfoModel" resultType="we.website.model.MenuInfoModel">
+		select version_id versionId
+			, menu_id menuId
+			, menu_name menuName
+			, menu_type menuType
+			, group_id groupId
+			, page_id pageId
+			, parent_id parentId
+			, extract_flg extractFlg
+			, icon icon
+			, auth_type authType
+			, auth_value authValue
+			, menu_addon menuAddon
+		from m_menu_info
+		<where>
+			parent_id = #{parentId}
+		</where>
+		order by menu_id
+	</select>
+
+</mapper>

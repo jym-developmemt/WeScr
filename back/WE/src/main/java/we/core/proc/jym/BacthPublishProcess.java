@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import we.base.util.CommonUtil;
 import we.core.dto.ProcessDto;
 import we.core.proc.IProcess;
 import we.website.service.jym.BacthPublishService;
@@ -20,21 +21,17 @@ public class BacthPublishProcess implements IProcess {
 	@Override
 	public Object execute(ProcessDto proceeDto, List<Object> resultList) throws Exception {
 
-		Map<String, Object> selectedGoods = proceeDto.getObjData1();
-		List dataList = (List) selectedGoods.get("dataList");
-
 		// 检索条件
 		List<String> externalGoodsIds = new ArrayList<String>();
 
-		// 获取外部商品ID
-		for (int i = 0; i < dataList.size(); i++) {
-
-			Map<String, String> goodsMap = (Map<String, String>) dataList.get(i);
-
-			// 添加检索条件
-			externalGoodsIds.add(goodsMap.get("external_goods_id"));
+		if (proceeDto.getListData1() != null) {
+			for (Map<String, Object> dataMap : proceeDto.getListData1()) {
+				externalGoodsIds.add(CommonUtil.toString(dataMap.get("external_goods_id")));
+			}
 		}
-
-		return jymBatchService.execGoodsPublish(externalGoodsIds);
+		
+		jymBatchService.execGoodsPublish(externalGoodsIds);
+		
+		return 0; 
 	}
 }
