@@ -113,6 +113,7 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 
 		// 发布商品数
 		int productCnt = 0;
+		String propertyValId = "";
 
 		for (GoodsEntityModel entity : goodsList) {
 			// 商品发布数据体
@@ -176,7 +177,10 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 				propertyDto.setPropertyId(Long.valueOf(property.getPropertyId()));
 
 				// 属性值ID
-				propertyDto.setValueId(Long.valueOf(property.getValueId()));
+				propertyValId = CommonUtil.nvl(property.getValueId());
+				if (propertyValId != "") {
+					propertyDto.setValueId(Long.valueOf(property.getValueId()));
+				}
 
 				// 属性值
 				propertyDto.setValue(property.getValue());
@@ -247,7 +251,10 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 				sellerPropertyDto.setPropertyId(Long.valueOf(property.getPropertyId()));
 
 				// 属性值ID
-				sellerPropertyDto.setValueId(Long.valueOf(property.getValueId()));
+				propertyValId = CommonUtil.nvl(property.getValueId());
+				if (propertyValId != "") {
+					sellerPropertyDto.setValueId(Long.valueOf(property.getValueId()));
+				}
 
 				// 属性值（AES加密）
 				String propertyVal = AESUtil.encrypt(property.getValue(), Constant.JYM_ASE_KEY);
