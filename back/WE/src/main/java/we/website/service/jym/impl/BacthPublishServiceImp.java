@@ -178,7 +178,7 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 
 				// 属性值ID
 				propertyValId = CommonUtil.nvl(property.getValueId());
-				if (propertyValId != "") {
+				if (!(propertyValId.isEmpty())) {
 					propertyDto.setValueId(Long.valueOf(property.getValueId()));
 				}
 
@@ -252,7 +252,7 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 
 				// 属性值ID
 				propertyValId = CommonUtil.nvl(property.getValueId());
-				if (propertyValId != "") {
+				if (!(propertyValId.isEmpty())) {
 					sellerPropertyDto.setValueId(Long.valueOf(property.getValueId()));
 				}
 
@@ -290,9 +290,10 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 			batchHdModel.setProductCnt(productCnt);
 			batchHdModel.isSucceed(rsp.getSucceed());
 			batchHdModel.setStateCode(rsp.getStateCode());
-
+			batchHdModel.setMethodId("7");
+			
 			// 批处理表添加返回参数
-			jymBatchHdDao.insertBatchHdAll(batchHdModel);
+			jymBatchHdDao.insertBatchHd(batchHdModel);
 
 			logger.info(rsp.getBody());
 

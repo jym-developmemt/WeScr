@@ -16,5 +16,5 @@ public interface JymBatchHdDao {
 	public List<BatchHdModel> selectBatchAll();
 
 	/** 批量插入批处理表 */
-	public void insertBatchHdAll(BatchHdModel batchHd);
+	public void insertBatchHd(BatchHdModel batchHd);
 }
