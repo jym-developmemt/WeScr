@@ -65,6 +65,10 @@ public class BacthTaskQServiceImp extends BaseService implements BatchTaskQServi
 
 		GoodsBatchTaskQueryDto commandDto;
 
+		if (!jymExecEnable) {
+			return true;
+		}
+		
 		for (Map<String,String> batchIdInfo : batchIds) {
 			if (batchIdInfo.get("batch_id").isEmpty()) {
 				continue;
@@ -77,10 +81,6 @@ public class BacthTaskQServiceImp extends BaseService implements BatchTaskQServi
 			commandDto.setBatchId(Long.valueOf(batchIdInfo.get("batch_id")));
 			
 			req.setGoodsBatchTaskQuery(commandDto);
-
-			if (!jymExecEnable) {
-				return true;
-			}
 
 			try {
 				// 执行商品查询
@@ -107,6 +107,7 @@ public class BacthTaskQServiceImp extends BaseService implements BatchTaskQServi
 				batchHdModel.setStateCode(rsp.getStateCode());
 				batchHdModel.setMethodId("3");
 				batchHdModel.setExternalBatchId(batchIdInfo.get("external_batch_id"));
+				batchHdModel.setBatchId(batchIdInfo.get("batch_id"));
 				
 				// 批处理表更新返回参数
 				jymBatchHdDao.updateBatchHd(batchHdModel);
