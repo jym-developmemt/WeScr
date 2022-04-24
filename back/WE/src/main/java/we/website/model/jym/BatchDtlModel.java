@@ -16,7 +16,7 @@ public class BatchDtlModel {
 	private String externalGoodsId;
 
 	/** 交易猫商品ID */
-	private boolean goodsId;
+	private String goodsId;
 
 	/** 商品状态 */
 	private int goodsStatus;
@@ -49,11 +49,11 @@ public class BatchDtlModel {
 		this.externalGoodsId = externalGoodsId;
 	}
 
-	public boolean isGoodsId() {
+	public String getGoodsId() {
 		return goodsId;
 	}
 
-	public void setGoodsId(boolean goodsId) {
+	public void setGoodsId(String goodsId) {
 		this.goodsId = goodsId;
 	}
 

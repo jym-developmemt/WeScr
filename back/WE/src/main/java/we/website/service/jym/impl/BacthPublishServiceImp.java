@@ -98,7 +98,8 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 	private boolean execTaobaoApi(List<GoodsEntityModel> goodsList, List<GoodsPropertyModel> goodsProperties,
 			List<GoodsImagesModel> goodsImages, List<SellerGoodsPropertyModel> sellerProperties) {
 
-		TaobaoClient client = new DefaultTaobaoClient(Constant.TAOBAO_HTTP_URL, Constant.APP_KEY, Constant.APP_SECRET);
+		TaobaoClient client = new DefaultTaobaoClient(Constant.TAOBAO_HTTP_URL, Constant.APP_KEY, Constant.APP_SECRET,
+				Constant.RESPONSE_FORMAT);
 
 		// 批量发布商品请求参数
 		AlibabaJymItemExternalGoodsBatchPublishRequest req = new AlibabaJymItemExternalGoodsBatchPublishRequest();
@@ -291,7 +292,7 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 			batchHdModel.isSucceed(rsp.getSucceed());
 			batchHdModel.setStateCode(rsp.getStateCode());
 			batchHdModel.setMethodId("7");
-			
+
 			// 批处理表添加返回参数
 			jymBatchHdDao.insertBatchHd(batchHdModel);
 
