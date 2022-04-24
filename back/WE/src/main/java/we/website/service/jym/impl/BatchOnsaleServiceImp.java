@@ -2,6 +2,7 @@ package we.website.service.jym.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import com.taobao.api.response.AlibabaJymItemExternalGoodsBatchOnsaleResponse.Go
 import we.base.util.CommonUtil;
 import we.website.constant.Constant;
 import we.website.dao.JymBatchDtlDao;
+import we.website.dao.JymBatchHdDao;
 import we.website.model.jym.BatchDtlModel;
 import we.website.model.jym.BatchHdModel;
 import we.website.service.jym.BatchOnsaleService;
@@ -34,22 +36,56 @@ public class BatchOnsaleServiceImp implements BatchOnsaleService {
 	private boolean jymExecEnable;
 
 	@Autowired
+	private JymBatchHdDao jymBatchHdDao;
+
+	@Autowired
 	private JymBatchDtlDao jymBatchDtlDao;
 
 	@Override
-	public boolean execGoodsOnsale(List<String> externalGoodsId) {
+	public boolean execGoodsOnsale(List<Map<String, String>> goodsIdList) {
 
-		// 查询上架的商品
-		List<BatchDtlModel> batchDtlList = jymBatchDtlDao.selectGoodsidList(externalGoodsId);
+		// 外部批次ID
+		String externalBatchId = CommonUtil.generateKey();
 
-		boolean isSucceed = execTaobaoApi(batchDtlList);
+		// 执行交易猫外部商家批量上架商品接口
+		boolean isSucceed = execTaobaoApi(externalBatchId, goodsIdList);
+
+		// 批处理执行成功
+		if (isSucceed) {
+
+			List<BatchDtlModel> dtlList = new ArrayList<>();
+
+			for (Map<String, String> goodsIdMap : goodsIdList) {
+
+				BatchDtlModel dtlModel = new BatchDtlModel();
+
+				// 交易猫商品ID
+				dtlModel.setGoodsId(goodsIdMap.get("goods_id"));
+
+				// 上架商品ID
+				dtlModel.setExternalGoodsId(goodsIdMap.get("external_goods_id"));
+
+				// 外部批次ID
+				dtlModel.setExternalBatchId(externalBatchId);
+
+				dtlList.add(dtlModel);
+			}
+
+			jymBatchDtlDao.updateExternalBatchId(dtlList);
+		}
+
 		return isSucceed;
 	}
 
-	private boolean execTaobaoApi(List<BatchDtlModel> batchDtlList) {
+	/**
+	 * 
+	 * @param externalBatchId
+	 * @param goodsIdList
+	 * @return
+	 */
+	private boolean execTaobaoApi(String externalBatchId, List<Map<String, String>> goodsIdList) {
 
-		TaobaoClient client = new DefaultTaobaoClient(Constant.TAOBAO_HTTP_URL, Constant.APP_KEY, Constant.APP_SECRET,
-				Constant.RESPONSE_FORMAT);
+		TaobaoClient client = new DefaultTaobaoClient(Constant.TAOBAO_HTTP_URL, Constant.APP_KEY, Constant.APP_SECRET);
 
 		// 批量上传商品请求参数
 		AlibabaJymItemExternalGoodsBatchOnsaleRequest req = new AlibabaJymItemExternalGoodsBatchOnsaleRequest();
@@ -58,29 +94,25 @@ public class BatchOnsaleServiceImp implements BatchOnsaleService {
 		GoodsOnSaleCommandDto commandDto = new GoodsOnSaleCommandDto();
 
 		// 外部批次ID
-		commandDto.setExternalBatchId(CommonUtil.generateKey());
+		commandDto.setExternalBatchId(externalBatchId);
 
 		// 批量上架商品id集合
-		List<ExternalGoodsIdDto> goodsIdList = new ArrayList<ExternalGoodsIdDto>();
+		List<ExternalGoodsIdDto> dtoList = new ArrayList<ExternalGoodsIdDto>();
 
 		// 上架商品数
 		int goodsCnt = 0;
 
-		for (BatchDtlModel dtlModel : batchDtlList) {
-
-			if (dtlModel.getGoodsId().isEmpty()) {
-				continue;
-			}
+		for (Map<String, String> goodsIdMap : goodsIdList) {
 
 			ExternalGoodsIdDto goodsIdDto = new ExternalGoodsIdDto();
 
 			// 上架商品ID
-			goodsIdDto.setExternalGoodsId(dtlModel.getExternalBatchId());
+			goodsIdDto.setExternalGoodsId(goodsIdMap.get("external_goods_id"));
 
 			// 交易猫商品ID
-			goodsIdDto.setGoodsId(Long.valueOf(dtlModel.getGoodsId()));
+			goodsIdDto.setGoodsId(Long.valueOf(goodsIdMap.get("goods_id")));
 
-			goodsIdList.add(goodsIdDto);
+			dtoList.add(goodsIdDto);
 
 			goodsCnt++;
 		}
@@ -106,6 +138,9 @@ public class BatchOnsaleServiceImp implements BatchOnsaleService {
 			batchHdModel.setStateCode(rsp.getStateCode());
 			batchHdModel.setMethodId("2");
 			batchHdModel.setExtraErrMsg(rsp.getExtraErrMsg());
+
+			// 批处理表添加返回参数
+			jymBatchHdDao.insertBatchHd(batchHdModel);
 
 			logger.info(rsp.getBody());
 			return rsp.isSuccess();

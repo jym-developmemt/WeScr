@@ -55,13 +55,15 @@
 		</where>
 	</delete>
 	
-	<select id="selectGoodsidList" parameterType="list" resultType="we.website.model.jym.BatchDtlModel">
-		SELECT goods_id FROM jym_m_batch_dtl WHERE 1=1
-		<if test="list != null and list.size() > 0">
-			AND external_goods_id in 
-			<foreach collection="list" item="externalId" index="index" open="(" close=")" separator=",">
-				#{externalId}
-			</foreach>
-		</if>
-	</select>
+	<update id="updateExternalBatchId" parameterType="list">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+        	UPDATE jym_m_batch_dtl
+        	<set>
+            	external_batch_id = ${item.externalBatchId}
+        	</set>
+        	WHERE goods_id = ${item.goodsId}
+        	AND external_goods_id = #{item.externalGoodsId}
+    	</foreach> 
+	</update>
+	
 </mapper>

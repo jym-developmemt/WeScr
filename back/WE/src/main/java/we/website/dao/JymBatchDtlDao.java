@@ -21,6 +21,6 @@ public interface JymBatchDtlDao {
 	/** 批量删除批处理明细表 */
 	public void deleteBatchDtl(BatchDtlModel batchDtl);
 
-	/** 根据external_goods_id查询goods_id */
-	public List<BatchDtlModel> selectGoodsidList(List<String> externalGoodsId);
+	/** 批量更新外部批处理ID */
+	public void updateExternalBatchId(List<BatchDtlModel> dtlList);
 }
