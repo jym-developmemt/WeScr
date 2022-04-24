@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="we.website.dao.JymBatchDtlDao">
+	<insert id="insertBatchDtl" parameterType="we.website.model.jym.BatchDtlModel">
+		INSERT INTO jym_m_batch_dtl(
+			external_batch_id
+			, external_goods_id
+			, goods_id
+			, goods_status
+			, status
+			, reason
+			, create_at
+			, update_at
+		) VALUES (
+			#{externalBatchId}
+			, #{externalGoodsId}
+			, #{goodsId}
+			, #{goodsStatus}
+			, #{status}
+			, #{reason}
+			, now()
+			, now()
+		)
+	</insert>
+	
+	<update id="updateBatchDtl" parameterType="we.website.model.jym.BatchDtlModel">
+		update jym_m_batch_dtl
+		<set>
+			<if test="goodsId != null">
+				goods_id = #{goodsId}
+			</if>
+			<if test="goodsStatus != null">
+				, goods_status = #{goodsStatus}
+			</if>
+			<if test="status != null">
+				, status = #{status}
+			</if>
+			<if test="reason != null">
+				, reason = #{reason}
+			</if>
+			, update_at = now()
+		</set>
+		<where>
+			external_batch_id = #{externalBatchId}
+		    and external_goods_id = #{externalGoodsId}
+		</where>
+	</update>
+	
+	<delete id="deleteBatchDtl" parameterType="we.website.model.jym.BatchDtlModel">
+		delete from jym_m_batch_dtl
+		<where>
+			external_batch_id = #{externalBatchId}
+		    and external_goods_id = #{externalGoodsId}
+		</where>
+	</delete>
+</mapper>

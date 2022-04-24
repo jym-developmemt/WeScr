@@ -17,4 +17,7 @@ public interface JymBatchHdDao {
 
 	/** 批量插入批处理表 */
 	public void insertBatchHd(BatchHdModel batchHd);
+	
+	/** 批量更新批处理表 */
+	public void updateBatchHd(BatchHdModel batchHd);
 }

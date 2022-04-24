@@ -50,7 +50,7 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 	protected static Logger logger = LoggerFactory.getLogger(BacthPublishServiceImp.class);
 
 	@Value("${jym.api_exec_enable}")
-	private boolean jmyExecEnable;
+	private boolean jymExecEnable;
 
 	@Autowired
 	private JymGoodsEntityDao jymGoodsEntityDao;
@@ -272,7 +272,7 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 
 		req.setGoodsPublishCommand(commandDto);
 
-		if (!jmyExecEnable) {
+		if (!jymExecEnable) {
 			return true;
 		}
 

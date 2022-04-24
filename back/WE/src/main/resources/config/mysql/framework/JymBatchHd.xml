@@ -39,4 +39,38 @@
 			, now()
 		)
 	</insert>
+	
+	<update id="updateBatchHd" parameterType="we.website.model.jym.BatchHdModel">
+		update jym_m_batch_hd
+		<set>
+			<if test="batchId != null">
+				batch_id = #{batchId}
+			</if>
+			<if test="succeed != null">
+				, succeed = #{succeed}
+			</if>
+			<if test="productCnt != null">
+				, product_cnt = #{productCnt}
+			</if>
+			<if test="stateCode != null">
+				, state_code = #{stateCode}
+			</if>
+			<if test="extraErrMsg != null">
+				, extra_err_msg = #{extraErrMsg}
+			</if>
+			<if test="methodId != null">
+				, method_id = #{methodId}
+			</if>
+			<if test="status != null">
+				, status = #{status}
+			</if>
+			<if test="reason != null">
+				, reason = #{reason}
+			</if>
+			, update_at = now()
+		</set>
+		<where>
+			external_batch_id = #{externalBatchId}
+		</where>
+	</update>
 </mapper>
