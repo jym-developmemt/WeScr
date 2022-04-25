@@ -61,8 +61,7 @@
         	<set>
             	external_batch_id = ${item.externalBatchId}
         	</set>
-        	WHERE goods_id = ${item.goodsId}
-        	AND external_goods_id = #{item.externalGoodsId}
+        	WHERE external_goods_id = ${item.externalGoodsId}
     	</foreach> 
 	</update>
 	

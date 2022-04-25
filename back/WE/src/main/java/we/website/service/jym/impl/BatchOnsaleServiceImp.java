@@ -59,9 +59,6 @@ public class BatchOnsaleServiceImp implements BatchOnsaleService {
 
 				BatchDtlModel dtlModel = new BatchDtlModel();
 
-				// 交易猫商品ID
-				dtlModel.setGoodsId(goodsIdMap.get("goods_id"));
-
 				// 上架商品ID
 				dtlModel.setExternalGoodsId(goodsIdMap.get("external_goods_id"));
 

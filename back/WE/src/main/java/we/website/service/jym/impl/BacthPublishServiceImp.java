@@ -1,7 +1,9 @@
 package we.website.service.jym.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +28,13 @@ import we.base.base.BaseService;
 import we.base.util.AESUtil;
 import we.base.util.CommonUtil;
 import we.website.constant.Constant;
+import we.website.dao.JymBatchDtlDao;
 import we.website.dao.JymBatchHdDao;
 import we.website.dao.JymGoodsEntityDao;
 import we.website.dao.JymGoodsImagesDao;
 import we.website.dao.JymGoodsPropertyDao;
 import we.website.dao.JymSellerGoodsPropertyDao;
+import we.website.model.jym.BatchDtlModel;
 import we.website.model.jym.BatchHdModel;
 import we.website.model.jym.GoodsEntityModel;
 import we.website.model.jym.GoodsImagesModel;
@@ -67,6 +71,9 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 	@Autowired
 	private JymBatchHdDao jymBatchHdDao;
 
+	@Autowired
+	private JymBatchDtlDao jymBatchDtlDao;
+
 	@Override
 	public boolean execGoodsPublish(List<String> externalGoodsId) {
 
@@ -98,6 +105,11 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 	private boolean execTaobaoApi(List<GoodsEntityModel> goodsList, List<GoodsPropertyModel> goodsProperties,
 			List<GoodsImagesModel> goodsImages, List<SellerGoodsPropertyModel> sellerProperties) {
 
+		// 发布商品数
+		int productCnt = 0;
+
+		List<BatchDtlModel> dtlList = new ArrayList<>();
+
 		TaobaoClient client = new DefaultTaobaoClient(Constant.TAOBAO_HTTP_URL, Constant.APP_KEY, Constant.APP_SECRET);
 
 		// 批量发布商品请求参数
@@ -105,17 +117,17 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 
 		GoodsPublishCommandDto commandDto = new GoodsPublishCommandDto();
 
+		// 外部批次ID
+		String externalBatchId = CommonUtil.generateKey();
+
 		// 外部批次ID，用于幂等（自动生成毫秒key）
-		commandDto.setExternalBatchId(CommonUtil.generateKey());
+		commandDto.setExternalBatchId(externalBatchId);
 		List<GoodsPublishDto> goodsPublishList = new ArrayList<GoodsPublishDto>();
 
 		commandDto.setGoodsList(goodsPublishList);
 
-		// 发布商品数
-		int productCnt = 0;
-		String propertyValId = "";
-
 		for (GoodsEntityModel entity : goodsList) {
+
 			// 商品发布数据体
 			GoodsPublishDto goodsPublishDto = new GoodsPublishDto();
 
@@ -163,27 +175,60 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 			 */
 			List<GoodsPropertyValueDto> propertyList = new ArrayList<GoodsPropertyValueDto>();
 
+			Map<String, Map<String, String>> propertyMap = new HashMap<String, Map<String, String>>();
+
 			for (GoodsPropertyModel property : goodsProperties) {
 
 				if (!property.getExternalGoodsId().equals(entity.getExternalGoodsId()))
 					continue;
+
+				// 商品属性ID
+				String propertyId = property.getPropertyId();
+				Map<String, String> propertyDtl = new HashMap<String, String>();
+
+				if (propertyMap.containsKey(propertyId)) {
+
+					propertyDtl = propertyMap.get(propertyId);
+
+					// 商品属性值
+					String val = propertyDtl.get("property_value");
+					val = val + "," + property.getValue();
+					propertyDtl.put("value", val);
+
+					// 商品属性值ID
+					propertyDtl.put("value_id", "");
+				} else {
+
+					// 商品属性值
+					propertyDtl.put("value", property.getValue());
+
+					// 商品属性值ID
+					propertyDtl.put("value_id", CommonUtil.nvl(property.getValueId()));
+				}
+
+				propertyMap.put(propertyId, propertyDtl);
+			}
+
+			for (String key : propertyMap.keySet()) {
 
 				/**
 				 * 商品属性对象
 				 */
 				GoodsPropertyValueDto propertyDto = new GoodsPropertyValueDto();
 
-				// 属性id
-				propertyDto.setPropertyId(Long.valueOf(property.getPropertyId()));
+				// 商品属性ID
+				propertyDto.setPropertyId(Long.valueOf(key));
 
-				// 属性值ID
-				propertyValId = CommonUtil.nvl(property.getValueId());
-				if (!(propertyValId.isEmpty())) {
-					propertyDto.setValueId(Long.valueOf(property.getValueId()));
+				Map<String, String> values = propertyMap.get(key);
+
+				// 商品属性值ID
+				String valueId = values.get("value_id");
+				if (!valueId.isEmpty()) {
+					propertyDto.setValueId(Long.valueOf(valueId));
 				}
 
-				// 属性值
-				propertyDto.setValue(property.getValue());
+				// 商品属性值
+				propertyDto.setValue(values.get("value"));
 
 				propertyList.add(propertyDto);
 			}
@@ -251,7 +296,7 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 				sellerPropertyDto.setPropertyId(Long.valueOf(property.getPropertyId()));
 
 				// 属性值ID
-				propertyValId = CommonUtil.nvl(property.getValueId());
+				String propertyValId = CommonUtil.nvl(property.getValueId());
 				if (!(propertyValId.isEmpty())) {
 					sellerPropertyDto.setValueId(Long.valueOf(property.getValueId()));
 				}
@@ -268,6 +313,16 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 			goodsPublishList.add(goodsPublishDto);
 
 			productCnt++;
+
+			BatchDtlModel dtlModel = new BatchDtlModel();
+
+			// 外部批次ID
+			dtlModel.setExternalBatchId(externalBatchId);
+
+			// 上架商品ID
+			dtlModel.setExternalGoodsId(entity.getExternalGoodsId());
+
+			dtlList.add(dtlModel);
 		}
 
 		req.setGoodsPublishCommand(commandDto);
@@ -295,6 +350,16 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 
 			// 批处理表添加返回参数
 			jymBatchHdDao.insertBatchHd(batchHdModel);
+
+			// batch执行成功
+			if (rsp.getSucceed()) {
+
+				for (BatchDtlModel model : dtlList) {
+
+					// 追加批处理明细表
+					jymBatchDtlDao.insertBatchDtl(model);
+				}
+			}
 
 			logger.info(rsp.getBody());
 
