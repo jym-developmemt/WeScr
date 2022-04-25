@@ -21,9 +21,7 @@ import com.taobao.api.response.AlibabaJymItemExternalGoodsBatchtaskQueryResponse
 import we.base.base.BaseService;
 import we.base.util.CommonUtil;
 import we.website.constant.Constant;
-import we.website.dao.JymBatchHdDao;
 import we.website.dao.JymBatchDtlDao;
-import we.website.model.jym.BatchHdModel;
 import we.website.model.jym.BatchDtlModel;
 import we.website.service.jym.BatchTaskQService;;
 
@@ -39,9 +37,6 @@ public class BacthTaskQServiceImp extends BaseService implements BatchTaskQServi
 
 	@Value("${jym.api_exec_enable}")
 	private boolean jymExecEnable;
-
-	@Autowired
-	private JymBatchHdDao jymBatchHdDao;
 
 	@Autowired
 	private JymBatchDtlDao jymBatchDtlDao;
