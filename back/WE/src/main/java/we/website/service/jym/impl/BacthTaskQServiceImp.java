@@ -21,9 +21,7 @@ import com.taobao.api.response.AlibabaJymItemExternalGoodsBatchtaskQueryResponse
 import we.base.base.BaseService;
 import we.base.util.CommonUtil;
 import we.website.constant.Constant;
-import we.website.dao.JymBatchHdDao;
 import we.website.dao.JymBatchDtlDao;
-import we.website.model.jym.BatchHdModel;
 import we.website.model.jym.BatchDtlModel;
 import we.website.service.jym.BatchTaskQService;;
 
@@ -39,9 +37,6 @@ public class BacthTaskQServiceImp extends BaseService implements BatchTaskQServi
 
 	@Value("${jym.api_exec_enable}")
 	private boolean jymExecEnable;
-
-	@Autowired
-	private JymBatchHdDao jymBatchHdDao;
 
 	@Autowired
 	private JymBatchDtlDao jymBatchDtlDao;
@@ -100,18 +95,7 @@ public class BacthTaskQServiceImp extends BaseService implements BatchTaskQServi
 					// 批处理明细表更新返回参数
 					jymBatchDtlDao.updateBatchDtl(batchDtlModel);
 				}
-								
-				// 设置批处理返回参数
-				BatchHdModel batchHdModel = new BatchHdModel();
-				batchHdModel.isSucceed(rsp.getSucceed());
-				batchHdModel.setStateCode(rsp.getStateCode());
-				batchHdModel.setMethodId("3");
-				batchHdModel.setExternalBatchId(batchIdInfo.get("external_batch_id"));
-				batchHdModel.setBatchId(batchIdInfo.get("batch_id"));
-				
-				// 批处理表更新返回参数
-				jymBatchHdDao.updateBatchHd(batchHdModel);
-	
+									
 				logger.info(rsp.getBody());
 			} catch (ApiException e) {
 				logger.info(e.getErrMsg());
