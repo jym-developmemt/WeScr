@@ -185,6 +185,8 @@ core:
     #交易猫外部商家批量发布商品
     JYM01: bacthPublishProcess
     JYM02: batchOnsaleProcess
+    JYM03: batchOffsaleProcess
+    JYM04: batchModifyPriceProcess
     JYM05: bacthTaskQProcess
     JYM06: statusBacthQProcess
     
