@@ -191,7 +191,7 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 					propertyDtl = propertyMap.get(propertyId);
 
 					// 商品属性值
-					String val = propertyDtl.get("property_value");
+					String val = propertyDtl.get("value");
 					val = val + "," + property.getValue();
 					propertyDtl.put("value", val);
 
