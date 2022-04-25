@@ -38,13 +38,12 @@ public class BacthTaskQProcess implements IProcess {
 				
 				tmpIds.put("external_batch_id", CommonUtil.toString(dataMap.get("external_batch_id")));
 				tmpIds.put("batch_id", CommonUtil.toString(dataMap.get("batch_id")));
-				tmpIds.put("external_goods_id", CommonUtil.toString(dataMap.get("external_goods_id")));
 				batchIds.add(tmpIds);
 			}
 		}
 		
 		List<Map<String, String>> batchIdList = new ArrayList<Map<String, String>>(batchIds);
-		
+				
 		jymBatchService.execBatchTask(batchIdList);
 		
 		return 0; 
