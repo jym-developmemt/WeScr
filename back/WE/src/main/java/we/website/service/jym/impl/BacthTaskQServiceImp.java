@@ -100,18 +100,7 @@ public class BacthTaskQServiceImp extends BaseService implements BatchTaskQServi
 					// 批处理明细表更新返回参数
 					jymBatchDtlDao.updateBatchDtl(batchDtlModel);
 				}
-								
-				// 设置批处理返回参数
-				BatchHdModel batchHdModel = new BatchHdModel();
-				batchHdModel.isSucceed(rsp.getSucceed());
-				batchHdModel.setStateCode(rsp.getStateCode());
-				batchHdModel.setMethodId("3");
-				batchHdModel.setExternalBatchId(batchIdInfo.get("external_batch_id"));
-				batchHdModel.setBatchId(batchIdInfo.get("batch_id"));
-				
-				// 批处理表更新返回参数
-				jymBatchHdDao.updateBatchHd(batchHdModel);
-	
+									
 				logger.info(rsp.getBody());
 			} catch (ApiException e) {
 				logger.info(e.getErrMsg());
