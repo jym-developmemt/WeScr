@@ -34,7 +34,7 @@ public class BatchHdModel {
 	private int status;
 
 	/** 原因 */
-	private int reason;
+	private String reason;
 
 	/** 创建时间 */
 	private Date createAt;
@@ -106,11 +106,11 @@ public class BatchHdModel {
 		this.status = status;
 	}
 
-	public int getReason() {
+	public String getReason() {
 		return reason;
 	}
 
-	public void setReason(int reason) {
+	public void setReason(String reason) {
 		this.reason = reason;
 	}
 

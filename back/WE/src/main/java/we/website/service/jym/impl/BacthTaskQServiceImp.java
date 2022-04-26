@@ -90,7 +90,8 @@ public class BacthTaskQServiceImp extends BaseService implements BatchTaskQServi
 					BatchDtlModel batchDtlModel = new BatchDtlModel();	
 					batchDtlModel.setExternalBatchId(batchIdInfo.get("external_batch_id"));
 					batchDtlModel.setExternalGoodsId(subTask.getExternalGoodsId());
-					batchDtlModel.setExternalGoodsId(CommonUtil.toString(subTask.getGoodsId()));					
+					batchDtlModel.setGoodsId(CommonUtil.toString(subTask.getGoodsId()));					
+					batchDtlModel.setReason(subTask.getReason());
 					
 					// 批处理明细表更新返回参数
 					jymBatchDtlDao.updateBatchDtl(batchDtlModel);
