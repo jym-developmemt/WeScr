@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 import we.base.util.CommonUtil;
 import we.core.dto.ProcessDto;
 import we.core.proc.IProcess;
-import we.website.service.jym.BatchOnsaleService;
+import we.website.service.jym.BatchOffsaleService;
 
 @Component()
-public class BatchOnsaleProcess implements IProcess {
+public class BatchOffsaleProcess implements IProcess {
 
 	@Autowired
-	private BatchOnsaleService jymBatchOnsaleService;
+	private BatchOffsaleService jymBatchOffsaleService;
 
 	@Override
 	public Object execute(ProcessDto proceeDto, List<Object> resultList) throws Exception {
@@ -40,7 +40,7 @@ public class BatchOnsaleProcess implements IProcess {
 			}
 		}
 
-		jymBatchOnsaleService.execGoodsOnsale(goodsIds);
+		jymBatchOffsaleService.execGoodsOffsale(goodsIds);
 
 		return 0;
 	}

@@ -119,11 +119,8 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 		// 外部批次ID
 		String externalBatchId = CommonUtil.generateKey();
 
-		// 外部批次ID，用于幂等（自动生成毫秒key）
-		commandDto.setExternalBatchId(externalBatchId);
-		List<GoodsPublishDto> goodsPublishList = new ArrayList<GoodsPublishDto>();
 
-		commandDto.setGoodsList(goodsPublishList);
+		List<GoodsPublishDto> goodsPublishList = new ArrayList<GoodsPublishDto>();
 
 		for (GoodsEntityModel entity : goodsList) {
 
@@ -323,7 +320,11 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 
 			dtlList.add(dtlModel);
 		}
-
+		
+		// 外部批次ID，用于幂等
+		commandDto.setExternalBatchId(externalBatchId);
+		// 商品发布数据体
+		commandDto.setGoodsList(goodsPublishList);
 		req.setGoodsPublishCommand(commandDto);
 
 		if (!jymExecEnable) {

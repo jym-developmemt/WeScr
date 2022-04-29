@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 import we.base.util.CommonUtil;
 import we.core.dto.ProcessDto;
 import we.core.proc.IProcess;
-import we.website.service.jym.BatchOnsaleService;
+import we.website.service.jym.BatchModifyPriceService;
 
 @Component()
-public class BatchOnsaleProcess implements IProcess {
+public class BatchModifyPriceProcess implements IProcess {
 
 	@Autowired
-	private BatchOnsaleService jymBatchOnsaleService;
+	private BatchModifyPriceService jymBatchModifyPriceService;
 
 	@Override
 	public Object execute(ProcessDto proceeDto, List<Object> resultList) throws Exception {
@@ -36,11 +36,12 @@ public class BatchOnsaleProcess implements IProcess {
 
 				tmpId.put("external_goods_id", CommonUtil.toString(dataMap.get("external_goods_id")));
 				tmpId.put("goods_id", CommonUtil.toString(dataMap.get("goods_id")));
+				tmpId.put("price", CommonUtil.toString(dataMap.get("price")));
 				goodsIds.add(tmpId);
 			}
 		}
 
-		jymBatchOnsaleService.execGoodsOnsale(goodsIds);
+		jymBatchModifyPriceService.execGoodsModifyPrice(goodsIds);
 
 		return 0;
 	}

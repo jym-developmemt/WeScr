@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 import com.taobao.api.ApiException;
 import com.taobao.api.DefaultTaobaoClient;
 import com.taobao.api.TaobaoClient;
-import com.taobao.api.request.AlibabaJymItemExternalGoodsBatchOnsaleRequest;
-import com.taobao.api.request.AlibabaJymItemExternalGoodsBatchOnsaleRequest.ExternalGoodsIdDto;
-import com.taobao.api.request.AlibabaJymItemExternalGoodsBatchOnsaleRequest.GoodsOnSaleCommandDto;
-import com.taobao.api.response.AlibabaJymItemExternalGoodsBatchOnsaleResponse;
-import com.taobao.api.response.AlibabaJymItemExternalGoodsBatchOnsaleResponse.GoodsBatchResultDto;
+import com.taobao.api.request.AlibabaJymItemExternalGoodsBatchOffsaleRequest;
+import com.taobao.api.request.AlibabaJymItemExternalGoodsBatchOffsaleRequest.ExternalGoodsIdDto;
+import com.taobao.api.request.AlibabaJymItemExternalGoodsBatchOffsaleRequest.GoodsOffSaleCommandDto;
+import com.taobao.api.response.AlibabaJymItemExternalGoodsBatchOffsaleResponse;
+import com.taobao.api.response.AlibabaJymItemExternalGoodsBatchOffsaleResponse.GoodsBatchResultDto;
 
 import we.base.util.CommonUtil;
 import we.website.constant.Constant;
@@ -25,12 +25,12 @@ import we.website.dao.JymBatchDtlDao;
 import we.website.dao.JymBatchHdDao;
 import we.website.model.jym.BatchDtlModel;
 import we.website.model.jym.BatchHdModel;
-import we.website.service.jym.BatchOnsaleService;
+import we.website.service.jym.BatchOffsaleService;
 
 @Service
-public class BatchOnsaleServiceImp implements BatchOnsaleService {
+public class BatchOffsaleServiceImp implements BatchOffsaleService {
 
-	protected static Logger logger = LoggerFactory.getLogger(BatchOnsaleServiceImp.class);
+	protected static Logger logger = LoggerFactory.getLogger(BatchOffsaleServiceImp.class);
 
 	@Value("${jym.api_exec_enable}")
 	private boolean jymExecEnable;
@@ -42,7 +42,7 @@ public class BatchOnsaleServiceImp implements BatchOnsaleService {
 	private JymBatchDtlDao jymBatchDtlDao;
 
 	@Override
-	public boolean execGoodsOnsale(List<Map<String, String>> goodsIdList) {
+	public boolean execGoodsOffsale(List<Map<String, String>> goodsIdList) {
 
 		// 执行交易猫外部商家批量上架商品接口
 		return this.execTaobaoApi(goodsIdList);
@@ -62,10 +62,10 @@ public class BatchOnsaleServiceImp implements BatchOnsaleService {
 		String externalBatchId = CommonUtil.generateKey();
 		
 		// 批量上传商品请求参数
-		AlibabaJymItemExternalGoodsBatchOnsaleRequest req = new AlibabaJymItemExternalGoodsBatchOnsaleRequest();
+		AlibabaJymItemExternalGoodsBatchOffsaleRequest req = new AlibabaJymItemExternalGoodsBatchOffsaleRequest();
 
 		// 业务入参对象
-		GoodsOnSaleCommandDto commandDto = new GoodsOnSaleCommandDto();
+		GoodsOffSaleCommandDto commandDto = new GoodsOffSaleCommandDto();
 
 		// 批量上架商品id集合
 		List<ExternalGoodsIdDto> dtoList = new ArrayList<ExternalGoodsIdDto>();
@@ -90,16 +90,16 @@ public class BatchOnsaleServiceImp implements BatchOnsaleService {
 		
 		// 外部批次ID
 		commandDto.setExternalBatchId(externalBatchId);
-		// 批量上架商品id集合
+		// 批量下架商品id集合
 		commandDto.setExternalGoodsIdList(dtoList);
-		req.setGoodsOnSaleCommand(commandDto);
+		req.setGoodsOffSaleCommand(commandDto);
 
 		if (!jymExecEnable) {
 			return true;
 		}
 
 		try {
-			AlibabaJymItemExternalGoodsBatchOnsaleResponse rsp = client.execute(req);
+			AlibabaJymItemExternalGoodsBatchOffsaleResponse rsp = client.execute(req);
 
 			// 获取返回参数
 			GoodsBatchResultDto batchResult = rsp.getResult();
@@ -111,7 +111,7 @@ public class BatchOnsaleServiceImp implements BatchOnsaleService {
 			batchHdModel.setProductCnt(goodsCnt);
 			batchHdModel.isSucceed(rsp.getSucceed());
 			batchHdModel.setStateCode(rsp.getStateCode());
-			batchHdModel.setMethodId("2");
+			batchHdModel.setMethodId("6");
 			batchHdModel.setExtraErrMsg(rsp.getExtraErrMsg());
 
 			// 批处理表添加返回参数
