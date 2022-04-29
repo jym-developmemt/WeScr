@@ -73,4 +73,11 @@
 			external_batch_id = #{externalBatchId}
 		</where>
 	</update>
+	
+	<delete id="deleteBatchHd" parameterType="we.website.model.jym.BatchHdModel">
+		delete from jym_m_batch_hd
+		<where>
+			external_batch_id = #{externalBatchId}
+		</where>
+	</delete>
 </mapper>

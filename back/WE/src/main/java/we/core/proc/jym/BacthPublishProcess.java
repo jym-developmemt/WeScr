@@ -21,16 +21,21 @@ public class BacthPublishProcess implements IProcess {
 	@Override
 	public Object execute(ProcessDto proceeDto, List<Object> resultList) throws Exception {
 
-		// 检索条件
+		// 发布商品
 		List<String> externalGoodsIds = new ArrayList<String>();
+		
+		// 发布商品现有external_batch_id时删除用
+		List<String> externalBatchIds = new ArrayList<String>();
 
 		if (proceeDto.getListData1() != null) {
 			for (Map<String, Object> dataMap : proceeDto.getListData1()) {
 				externalGoodsIds.add(CommonUtil.toString(dataMap.get("external_goods_id")));
+				
+				externalBatchIds.add(CommonUtil.toString(dataMap.get("external_batch_id")));
 			}
 		}
 		
-		jymBatchService.execGoodsPublish(externalGoodsIds);
+		jymBatchService.execGoodsPublish(externalGoodsIds, externalBatchIds);
 		
 		return 0; 
 	}

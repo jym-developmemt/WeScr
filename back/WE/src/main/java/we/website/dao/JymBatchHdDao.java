@@ -2,6 +2,7 @@ package we.website.dao;
 
 import java.util.List;
 
+import we.website.model.jym.BatchDtlModel;
 import we.website.model.jym.BatchHdModel;
 
 /**
@@ -20,4 +21,7 @@ public interface JymBatchHdDao {
 	
 	/** 批量更新批处理表 */
 	public void updateBatchHd(BatchHdModel batchHd);
+	
+	/** 批量删除批处理表 */
+	public void deleteBatchHd(BatchHdModel batchHd);
 }

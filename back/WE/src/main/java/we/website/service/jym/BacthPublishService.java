@@ -14,5 +14,5 @@ import org.springframework.stereotype.Service;
 public interface BacthPublishService {
 
 	// 执行商品发布
-	public boolean execGoodsPublish(List<String> externalGoodsId);
+	public boolean execGoodsPublish(List<String> externalGoodsId, List<String> externalBatchIds);
 }

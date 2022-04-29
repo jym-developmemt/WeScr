@@ -51,7 +51,9 @@
 		delete from jym_m_batch_dtl
 		<where>
 			external_batch_id = #{externalBatchId}
-		    and external_goods_id = #{externalGoodsId}
+			<if test="externalGoodsId != null">
+				and external_goods_id = #{externalGoodsId}
+			</if>
 		</where>
 	</delete>
 	

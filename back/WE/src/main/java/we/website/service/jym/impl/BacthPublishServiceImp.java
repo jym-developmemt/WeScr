@@ -75,22 +75,9 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 	private JymBatchDtlDao jymBatchDtlDao;
 
 	@Override
-	public boolean execGoodsPublish(List<String> externalGoodsId) {
+	public boolean execGoodsPublish(List<String> externalGoodsId, List<String> externalBatchIds) {
 
-		// 查询商品基本信息
-		List<GoodsEntityModel> goodsInfoList = jymGoodsEntityDao.searchGoodsListById(externalGoodsId);
-
-		// 查询商品属性
-		List<GoodsPropertyModel> goodsProperties = jymGoodsPropertyDao.searchGoodsPropertiesById(externalGoodsId);
-
-		// 查询商品图片
-		List<GoodsImagesModel> goodsImages = jymGoodsImagesDao.searchGoodsImagesById(externalGoodsId);
-
-		// 卖家账号信息商品属性
-		List<SellerGoodsPropertyModel> sellerProperties = jymSellerPropertyDao
-				.searchSellerPropertyById(externalGoodsId);
-
-		return this.execTaobaoApi(goodsInfoList, goodsProperties, goodsImages, sellerProperties);
+		return this.execTaobaoApi(externalGoodsId, externalBatchIds);
 	}
 
 	/**
@@ -102,11 +89,23 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 	 * @param sellerProperties
 	 * @return
 	 */
-	private boolean execTaobaoApi(List<GoodsEntityModel> goodsList, List<GoodsPropertyModel> goodsProperties,
-			List<GoodsImagesModel> goodsImages, List<SellerGoodsPropertyModel> sellerProperties) {
+	private boolean execTaobaoApi(List<String> externalGoodsId, List<String> externalBatchIds) {
 
 		// 发布商品数
 		int productCnt = 0;
+		
+		// 查询商品基本信息
+		List<GoodsEntityModel> goodsList = jymGoodsEntityDao.searchGoodsListById(externalGoodsId);
+
+		// 查询商品属性
+		List<GoodsPropertyModel> goodsProperties = jymGoodsPropertyDao.searchGoodsPropertiesById(externalGoodsId);
+
+		// 查询商品图片
+		List<GoodsImagesModel> goodsImages = jymGoodsImagesDao.searchGoodsImagesById(externalGoodsId);
+
+		// 卖家账号信息商品属性
+		List<SellerGoodsPropertyModel> sellerProperties = jymSellerPropertyDao
+				.searchSellerPropertyById(externalGoodsId);
 
 		List<BatchDtlModel> dtlList = new ArrayList<>();
 
@@ -351,13 +350,25 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 			// 批处理表添加返回参数
 			jymBatchHdDao.insertBatchHd(batchHdModel);
 
-			// batch执行成功
-			if (rsp.getSucceed()) {
-
-				for (BatchDtlModel model : dtlList) {
-
-					// 追加批处理明细表
-					jymBatchDtlDao.insertBatchDtl(model);
+			// 批处理明细表添加
+			for (BatchDtlModel model : dtlList) {
+				jymBatchDtlDao.insertBatchDtl(model);
+			}
+			
+			// 如果是商品再发布时旧数据删除
+			for (int i = 0; i < externalBatchIds.size(); i++) {
+				String oldExternalBatchId = externalBatchIds.get(i);
+				String nowExternalGoodsId = externalGoodsId.get(i);
+				
+				if (!oldExternalBatchId.isEmpty()) {
+					batchHdModel = new BatchHdModel();
+					batchHdModel.setExternalBatchId(oldExternalBatchId);
+					jymBatchHdDao.deleteBatchHd(batchHdModel);
+					
+					BatchDtlModel dtlModel = new BatchDtlModel();
+					dtlModel.setExternalBatchId(oldExternalBatchId);
+					dtlModel.setExternalGoodsId(nowExternalGoodsId);
+					jymBatchDtlDao.deleteBatchDtl(dtlModel);
 				}
 			}
 
