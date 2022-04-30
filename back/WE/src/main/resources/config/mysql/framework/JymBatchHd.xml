@@ -7,9 +7,15 @@
 	<select id="selectBatchAll" resultType="we.website.model.jym.BatchHdModel" >
 		select *
 		from jym_m_batch_hd
-		<!-- <where>
-			external_batch_id = #{externalBatchId}
-		</where> -->
+		<where>
+		    1 = 1
+		    <if test="externalBatchId != null">
+				and external_batch_id = #{externalBatchId}
+			</if>
+			<if test="batchId != null">
+				and batch_id = #{batchId}
+			</if>
+		</where>
 	</select>
 	
 	<insert id="insertBatchHd" parameterType="we.website.model.jym.BatchHdModel">
