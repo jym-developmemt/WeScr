@@ -4,18 +4,28 @@
 <mapper namespace="we.website.dao.JymBatchHdDao">
 	
 	<!-- 数据源信息检索 -->
-	<select id="selectBatchAll" resultType="we.website.model.jym.BatchHdModel" >
-		select *
-		from jym_m_batch_hd
-		<where>
-		    1 = 1
-		    <if test="externalBatchId != null">
-				and external_batch_id = #{externalBatchId}
-			</if>
-			<if test="batchId != null">
-				and batch_id = #{batchId}
-			</if>
-		</where>
+	<select id="selectNoGoodsId" resultType="we.website.model.jym.BatchHdModel" >
+		select 
+              h.external_batch_id as externalBatchId
+			, h.batch_id as batchId
+			, h.succeed
+			, h.product_cnt as productCnt
+			, h.state_code as stateCode
+			, h.extra_err_msg as extraErrMsg
+			, h.method_id as methodId
+			, h.status
+			, h.reason
+			, h.create_at as createAt
+			, h.update_at as updateAt
+		from jym_m_batch_hd h
+		left join jym_m_batch_dtl d on h.external_batch_id = d.external_batch_id
+        where 1 = 1
+	      and (d.goods_id is null
+		   or d.goods_id = "" )
+	      and (d.reason is null or d.reason = "")
+          and h.batch_id is not null 
+          and h.batch_id != ""
+          and h.method_id = 7
 	</select>
 	
 	<insert id="insertBatchHd" parameterType="we.website.model.jym.BatchHdModel">

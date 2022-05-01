@@ -26,11 +26,17 @@ public class StatusBacthQProcess implements IProcess {
 
 		if (proceeDto.getListData1() != null) {
 			for (Map<String, Object> dataMap : proceeDto.getListData1()) {
+				if (CommonUtil.toString(dataMap.get("goods_id")).isEmpty()) {
+					continue;
+				}
+				
 				goodsIds.add(CommonUtil.toString(dataMap.get("goods_id")));
 			}
 		}
 		
-		jymBatchService.execStatusBatch(goodsIds);
+		if (goodsIds.size() > 0) {
+			jymBatchService.execStatusBatch(goodsIds);
+		}
 		
 		return 0; 
 	}

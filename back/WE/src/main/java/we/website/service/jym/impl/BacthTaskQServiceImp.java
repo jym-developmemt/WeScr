@@ -1,12 +1,18 @@
 package we.website.service.jym.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.taobao.api.ApiException;
@@ -20,9 +26,12 @@ import com.taobao.api.response.AlibabaJymItemExternalGoodsBatchtaskQueryResponse
 
 import we.base.base.BaseService;
 import we.base.util.CommonUtil;
+import we.base.util.TokenUtils;
 import we.website.constant.Constant;
 import we.website.dao.JymBatchDtlDao;
+import we.website.dao.JymBatchHdDao;
 import we.website.model.jym.BatchDtlModel;
+import we.website.model.jym.BatchHdModel;
 import we.website.service.jym.BatchTaskQService;;
 
 /**
@@ -41,11 +50,42 @@ public class BacthTaskQServiceImp extends BaseService implements BatchTaskQServi
 	@Autowired
 	private JymBatchDtlDao jymBatchDtlDao;
 	
+	@Autowired
+	private JymBatchHdDao jymBatchHdDao;
+	
 	@Override
 	public boolean execBatchTask(List<Map<String,String>> batchIds) {
 		return this.execTaobaoApi(batchIds);
 	}
-
+	
+	/**
+	 * 定时查询
+	 */
+	@Scheduled(cron = "2 * * * * ?")
+	public void sendNotice() {
+		// 用户认证
+		if (SecurityContextHolder.getContext().getAuthentication() == null) {
+			SecurityContextHolder.getContext().setAuthentication(TokenUtils.createBatchAuthentication());
+		}
+		
+		List<Map<String, String>> batchIds = new ArrayList<>();
+		
+		// 批处理明细表更新返回参数
+		List<BatchHdModel> result = jymBatchHdDao.selectNoGoodsId();
+		
+		if (result.size() > 0) {
+			for (BatchHdModel tmpData : result) {	
+				Map<String, String> tmpIds = new HashMap<>();
+				
+				tmpIds.put("external_batch_id", tmpData.getExternalBatchId());
+				tmpIds.put("batch_id", tmpData.getBatchId());
+				batchIds.add(tmpIds);
+			}
+		}
+		
+		//this.execTaobaoApi(batchIds); 
+	}
+	
 	/**
 	 * 向交易猫批量查询商品
 	 * 

@@ -39,9 +39,11 @@ public class BatchOffsaleProcess implements IProcess {
 				goodsIds.add(tmpId);
 			}
 		}
-
-		jymBatchOffsaleService.execGoodsOffsale(goodsIds);
-
+		
+		if (goodsIds.size() > 0) {
+			jymBatchOffsaleService.execGoodsOffsale(goodsIds);
+		}
+		
 		return 0;
 	}
 

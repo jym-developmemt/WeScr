@@ -23,4 +23,10 @@ public interface JymBatchDtlDao {
 
 	/** 批量更新外部批处理ID */
 	public void updateExternalBatchId(List<BatchDtlModel> dtlList);
+	
+	/** 批量查询没有Status的数据 */
+	public List<BatchDtlModel> selectNoStatus();
+	
+	/** 查询数据条数 */
+	public int CountDtlData(BatchDtlModel batchDtl);
 }

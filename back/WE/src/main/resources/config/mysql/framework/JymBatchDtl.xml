@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="we.website.dao.JymBatchDtlDao">
+
 	<insert id="insertBatchDtl" parameterType="we.website.model.jym.BatchDtlModel">
 		INSERT INTO jym_m_batch_dtl(
 			external_batch_id
@@ -67,4 +68,40 @@
     	</foreach> 
 	</update>
 	
+	<select id="selectNoStatus" resultType="we.website.model.jym.BatchDtlModel" >
+		select 
+		      external_batch_id as externalBatchId
+			, external_goods_id as externalGoodsId
+			, goods_id as goodsId
+			, goods_status as goodsStatus
+			, status
+			, reason
+			, create_at as createAt
+			, update_at as updateAt
+		from jym_m_batch_dtl
+		<where>
+		    1 = 1
+		    and goods_id is not null
+		    and goods_id != "" 
+		    and goods_status = 0
+		</where>
+	</select>
+	
+	<select id="CountDtlData" parameterType="we.website.model.jym.BatchDtlModel" resultType="int" >
+		select 
+		      count(1)
+		from jym_m_batch_dtl
+		<where>
+		    1 = 1
+		    <if test="externalBatchId != null">
+				and external_batch_id = #{externalBatchId}
+			</if>
+			<if test="externalGoodsId != null">
+				and external_goods_id = #{externalGoodsId}
+			</if>
+			<if test="goodsId != null">
+				and goods_id = #{goodsId}
+			</if>
+		</where>
+	</select>
 </mapper>

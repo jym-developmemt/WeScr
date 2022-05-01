@@ -191,7 +191,7 @@ core:
     JYM06: statusBacthQProcess
     
 jym:
-  api_exec_enable: true
+  api_exec_enable: false
     
   
 

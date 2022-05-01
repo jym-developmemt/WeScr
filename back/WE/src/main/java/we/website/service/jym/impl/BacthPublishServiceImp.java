@@ -362,14 +362,21 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 				String nowExternalGoodsId = externalGoodsId.get(i);
 				
 				if (!oldExternalBatchId.isEmpty()) {
-					batchHdModel = new BatchHdModel();
-					batchHdModel.setExternalBatchId(oldExternalBatchId);
-					jymBatchHdDao.deleteBatchHd(batchHdModel);
-					
+					// 旧明细数据删除
 					BatchDtlModel dtlModel = new BatchDtlModel();
 					dtlModel.setExternalBatchId(oldExternalBatchId);
 					dtlModel.setExternalGoodsId(nowExternalGoodsId);
 					jymBatchDtlDao.deleteBatchDtl(dtlModel);
+					
+					BatchDtlModel chkDtlModel = new BatchDtlModel();
+					chkDtlModel.setExternalBatchId(oldExternalBatchId);
+					int oldExternalBatchIdDtlCnt = jymBatchDtlDao.CountDtlData(chkDtlModel);
+					// 就明细数据如果没有时，旧的表头数据也一起删除掉 
+					if (oldExternalBatchIdDtlCnt == 0) {
+						batchHdModel = new BatchHdModel();
+						batchHdModel.setExternalBatchId(oldExternalBatchId);
+						jymBatchHdDao.deleteBatchHd(batchHdModel);
+					}
 				}
 			}
 

@@ -2,7 +2,6 @@ package we.website.dao;
 
 import java.util.List;
 
-import we.website.model.jym.BatchDtlModel;
 import we.website.model.jym.BatchHdModel;
 
 /**
@@ -14,7 +13,7 @@ import we.website.model.jym.BatchHdModel;
 public interface JymBatchHdDao {
 
 	/** 检索批处理列表 */
-	public List<BatchHdModel> selectBatchAll();
+	public List<BatchHdModel> selectNoGoodsId();
 
 	/** 批量插入批处理表 */
 	public void insertBatchHd(BatchHdModel batchHd);

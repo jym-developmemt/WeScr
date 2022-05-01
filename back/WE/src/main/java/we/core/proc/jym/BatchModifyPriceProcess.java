@@ -40,9 +40,11 @@ public class BatchModifyPriceProcess implements IProcess {
 				goodsIds.add(tmpId);
 			}
 		}
-
-		jymBatchModifyPriceService.execGoodsModifyPrice(goodsIds);
-
+		
+		if (goodsIds.size() > 0) {
+			jymBatchModifyPriceService.execGoodsModifyPrice(goodsIds);
+		}
+		
 		return 0;
 	}
 

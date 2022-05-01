@@ -44,7 +44,9 @@ public class BacthTaskQProcess implements IProcess {
 		
 		List<Map<String, String>> batchIdList = new ArrayList<Map<String, String>>(batchIds);
 				
-		jymBatchService.execBatchTask(batchIdList);
+		if (batchIdList.size() > 0) {
+			jymBatchService.execBatchTask(batchIdList);
+		}
 		
 		return 0; 
 	}

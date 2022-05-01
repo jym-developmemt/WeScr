@@ -40,8 +40,10 @@ public class BatchOnsaleProcess implements IProcess {
 			}
 		}
 
-		jymBatchOnsaleService.execGoodsOnsale(goodsIds);
-
+		if (goodsIds.size() > 0) {
+			jymBatchOnsaleService.execGoodsOnsale(goodsIds);
+		}
+		
 		return 0;
 	}
 

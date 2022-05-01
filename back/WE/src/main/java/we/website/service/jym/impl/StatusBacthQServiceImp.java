@@ -60,15 +60,15 @@ public class StatusBacthQServiceImp extends BaseService implements StautsBatchQS
 
 		BatchGoodsStatusQueryDto commandDto = new BatchGoodsStatusQueryDto();
 
-		if (!jymExecEnable) {
-			return true;
-		}
-		
 		List<Long> goodsIdList = goodsIds.stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
 		
 		commandDto.setGoodsIdList(goodsIdList);
 		
 		req.setBatchGoodsStatusQuery(commandDto);
+		
+		if (!jymExecEnable) {
+			return true;
+		}
 		
 		try {
 			// 执行商品查询
