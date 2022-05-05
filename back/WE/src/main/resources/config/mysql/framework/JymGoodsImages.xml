@@ -18,4 +18,25 @@
 			</foreach>
 		</if>
 	</select>
+	
+	<insert id="insertGoodsImage" parameterType="we.website.model.jym.GoodsImagesModel">
+		INSERT INTO jym_b_goods_images(
+			external_goods_id
+			, image_id
+			, image_url
+			, note
+		) VALUES (
+			#{externalGoodsId}
+			, #{imageId}
+			, #{imageUrl}
+			, #{note}
+		)
+	</insert>
+	
+	<delete id="deleteGoodsImage" parameterType="we.website.model.jym.GoodsImagesModel">
+		delete from jym_b_goods_images
+		<where>
+			external_goods_id = #{externalGoodsId}
+		</where>
+	</delete>
 </mapper>

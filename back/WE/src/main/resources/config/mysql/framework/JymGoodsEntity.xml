@@ -68,5 +68,15 @@
 			</foreach>
 		</if>
 	</select>
-
+	
+	<select id="selectNotSendData" resultType="we.website.model.jym.GoodsEntityModel" >
+		select 
+		       external_goods_id as externalGoodsId
+		from jym_v_goods_entity
+		<where>
+		    1 = 1
+		    and external_batch_id is null
+		    or external_batch_id = "" 
+		</where>
+	</select>
 </mapper>

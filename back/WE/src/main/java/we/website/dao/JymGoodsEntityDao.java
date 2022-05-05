@@ -13,4 +13,6 @@ import we.website.model.jym.GoodsEntityModel;
 public interface JymGoodsEntityDao {
 
 	public List<GoodsEntityModel> searchGoodsListById(List<String> externalGoodsId);
+	
+	public List<GoodsEntityModel> selectNotSendData();
 }

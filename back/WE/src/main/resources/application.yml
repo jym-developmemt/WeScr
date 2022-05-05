@@ -189,10 +189,13 @@ core:
     JYM04: batchModifyPriceProcess
     JYM05: bacthTaskQProcess
     JYM06: statusBacthQProcess
+    JYM11: createImageFolderProcess
+    JYM12: createImageDataProcess
     
 jym:
   api_exec_enable: false
-    
-  
+  local_netdisk_path: D:\testjym01
+  netdisk_url: http://testjym01.pek3b.qingstor.com/
+
 
 

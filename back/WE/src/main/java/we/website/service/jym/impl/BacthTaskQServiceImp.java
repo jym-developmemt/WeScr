@@ -62,7 +62,7 @@ public class BacthTaskQServiceImp extends BaseService implements BatchTaskQServi
 	 * 定时查询
 	 */
 	@Scheduled(cron = "2 * * * * ?")
-	public void sendNotice() {
+	public void autoBatchTaskQ() {
 		// 用户认证
 		if (SecurityContextHolder.getContext().getAuthentication() == null) {
 			SecurityContextHolder.getContext().setAuthentication(TokenUtils.createBatchAuthentication());
@@ -83,7 +83,7 @@ public class BacthTaskQServiceImp extends BaseService implements BatchTaskQServi
 			}
 		}
 		
-		//this.execTaobaoApi(batchIds); 
+		this.execTaobaoApi(batchIds); 
 	}
 	
 	/**
