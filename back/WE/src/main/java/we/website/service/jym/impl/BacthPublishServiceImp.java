@@ -226,26 +226,6 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 					// 商品属性值ID
 					propertyDtl.put("value_id", "");
 				}
-				
-//				if (propertyMap.containsKey(propertyId)) {
-//
-//					propertyDtl = propertyMap.get(propertyId);
-//
-//					// 商品属性值
-//					String val = propertyDtl.get("value");
-//					val = val + "," + property.getValue();
-//					propertyDtl.put("value", val);
-//
-//					// 商品属性值ID
-//					propertyDtl.put("value_id", "");
-//				} else {
-//
-//					// 商品属性值
-//					propertyDtl.put("value", property.getValue());
-//
-//					// 商品属性值ID
-//					propertyDtl.put("value_id", CommonUtil.nvl(property.getValueId()));
-//				}
 
 				propertyMap.put(propertyId, propertyDtl);
 			}
