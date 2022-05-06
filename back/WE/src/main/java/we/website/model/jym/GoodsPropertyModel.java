@@ -19,6 +19,9 @@ public class GoodsPropertyModel {
 
 	// 属性值
 	private String value;
+	
+	// 属性类型
+	private String type;
 
 	public String getExternalGoodsId() {
 		return externalGoodsId;
@@ -50,6 +53,14 @@ public class GoodsPropertyModel {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override

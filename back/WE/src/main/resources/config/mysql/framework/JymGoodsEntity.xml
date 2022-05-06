@@ -59,7 +59,7 @@
 			, fsi.server_id as siServerId
 			, fsi.server_name as siServerName
 		FROM jym_m_goods_entity mge
-		LEFT JOIN jym_f_server_info fsi ON mge.server_info_id = fsi.id
+		LEFT JOIN jym_f_server_info fsi ON mge.server_info_id = fsi.server_info_id
 		WHERE 1=1 
 		<if test="list != null and list.size() > 0">
 			AND mge.external_goods_id in 

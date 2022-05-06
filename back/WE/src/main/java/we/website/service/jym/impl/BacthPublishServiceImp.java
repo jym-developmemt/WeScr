@@ -42,6 +42,7 @@ import we.website.model.jym.GoodsPropertyModel;
 import we.website.model.jym.SellerGoodsPropertyModel;
 import we.website.model.jym.ServerInfoModel;
 import we.website.service.jym.BacthPublishService;
+import we.website.service.jym.SellerGoodsPropertyService;
 
 /**
  * 
@@ -73,6 +74,9 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 
 	@Autowired
 	private JymBatchDtlDao jymBatchDtlDao;
+	
+	@Autowired
+	private SellerGoodsPropertyService jymSellerGoodsPropertyService;
 
 	@Override
 	public boolean execGoodsPublish(List<String> externalGoodsId, List<String> externalBatchIds) {
@@ -103,10 +107,6 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 		// 查询商品图片
 		List<GoodsImagesModel> goodsImages = jymGoodsImagesDao.searchGoodsImagesById(externalGoodsId);
 
-		// 卖家账号信息商品属性
-		List<SellerGoodsPropertyModel> sellerProperties = jymSellerPropertyDao
-				.searchSellerPropertyById(externalGoodsId);
-
 		List<BatchDtlModel> dtlList = new ArrayList<>();
 
 		TaobaoClient client = new DefaultTaobaoClient(Constant.TAOBAO_HTTP_URL, Constant.APP_KEY, Constant.APP_SECRET);
@@ -118,8 +118,14 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 
 		// 外部批次ID
 		String externalBatchId = CommonUtil.generateKey();
+		
+		// 生成游戏属性卖家属性关系数据
+		jymSellerGoodsPropertyService.createDataByGoodsEntity(goodsList);
 
-
+		// 卖家账号信息商品属性
+		List<SellerGoodsPropertyModel> sellerProperties = jymSellerPropertyDao
+				.searchSellerPropertyById(externalGoodsId);
+		
 		List<GoodsPublishDto> goodsPublishList = new ArrayList<GoodsPublishDto>();
 
 		for (GoodsEntityModel entity : goodsList) {
@@ -180,27 +186,66 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 
 				// 商品属性ID
 				String propertyId = property.getPropertyId();
+				// 属性类型
+				String propertyType = property.getType();
 				Map<String, String> propertyDtl = new HashMap<String, String>();
 
-				if (propertyMap.containsKey(propertyId)) {
-
-					propertyDtl = propertyMap.get(propertyId);
-
-					// 商品属性值
-					String val = propertyDtl.get("value");
-					val = val + "," + property.getValue();
-					propertyDtl.put("value", val);
-
-					// 商品属性值ID
-					propertyDtl.put("value_id", "");
-				} else {
-
+				// 只有属性=1单选时，需要valueId
+				// 只有属性=2多选时，所有的value需要逗号隔开保存到一起
+				if (propertyType.equals("1")) {
 					// 商品属性值
 					propertyDtl.put("value", property.getValue());
 
 					// 商品属性值ID
 					propertyDtl.put("value_id", CommonUtil.nvl(property.getValueId()));
 				}
+				else if(propertyType.equals("2")) {
+					if (propertyMap.containsKey(propertyId)) {
+
+						propertyDtl = propertyMap.get(propertyId);
+
+						// 商品属性值
+						String val = propertyDtl.get("value");
+						val = val + "," + property.getValue();
+						propertyDtl.put("value", val);
+
+						// 商品属性值ID
+						propertyDtl.put("value_id", "");
+					} else {
+
+						// 商品属性值
+						propertyDtl.put("value", property.getValue());
+
+						// 商品属性值ID
+						propertyDtl.put("value_id", "");
+					}
+				}else {
+					// 商品属性值
+					propertyDtl.put("value", property.getValue());
+
+					// 商品属性值ID
+					propertyDtl.put("value_id", "");
+				}
+				
+//				if (propertyMap.containsKey(propertyId)) {
+//
+//					propertyDtl = propertyMap.get(propertyId);
+//
+//					// 商品属性值
+//					String val = propertyDtl.get("value");
+//					val = val + "," + property.getValue();
+//					propertyDtl.put("value", val);
+//
+//					// 商品属性值ID
+//					propertyDtl.put("value_id", "");
+//				} else {
+//
+//					// 商品属性值
+//					propertyDtl.put("value", property.getValue());
+//
+//					// 商品属性值ID
+//					propertyDtl.put("value_id", CommonUtil.nvl(property.getValueId()));
+//				}
 
 				propertyMap.put(propertyId, propertyDtl);
 			}

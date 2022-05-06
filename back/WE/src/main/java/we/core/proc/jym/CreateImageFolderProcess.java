@@ -8,8 +8,10 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import we.base.util.TokenUtils;
 import we.core.dto.ProcessDto;
 import we.core.proc.IProcess;
 import we.website.service.jym.CreateImageFolderService;
@@ -45,6 +47,11 @@ public class CreateImageFolderProcess implements IProcess {
 	 */
 	@Scheduled(cron = "5 * * * * ?")
 	public void autoCreate() {
+		// 用户认证
+		if (SecurityContextHolder.getContext().getAuthentication() == null) {
+			SecurityContextHolder.getContext().setAuthentication(TokenUtils.createBatchAuthentication());
+		}
+		
 		List<String> externalGoodsIds = jymCreateImgFolderService.getNotSendData();
 		
 		if (externalGoodsIds.size()> 0) {

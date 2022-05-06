@@ -13,4 +13,10 @@ import we.website.model.jym.SellerGoodsPropertyModel;
 public interface JymSellerGoodsPropertyDao {
 
 	public List<SellerGoodsPropertyModel> searchSellerPropertyById(List<String> externalGoodsId);
+	
+	public void insertData(SellerGoodsPropertyModel sellerGoodsPropertyInfo);
+	
+	public void deleteData(SellerGoodsPropertyModel sellerGoodsPropertyInfo);
+	
+	public void deleteDataById(List<String> externalGoodsId);
 }

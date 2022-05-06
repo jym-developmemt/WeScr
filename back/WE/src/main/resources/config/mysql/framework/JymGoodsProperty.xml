@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="we.website.dao.JymSellerGoodsPropertyDao">
+<mapper namespace="we.website.dao.JymGoodsPropertyDao">
 	
-	<select id="searchSellerPropertyById" parameterType="list" resultType="we.website.model.jym.SellerGoodsPropertyModel" >
+	<select id="searchGoodsPropertiesById" parameterType="list" resultType="we.website.model.jym.GoodsPropertyModel" >
 		SELECT 
-			sgp.external_goods_id as externalGoodsId
-			, sgp.property_id as propertyId
-			, sgp.value_id as valueId
-			, sgp.value as value
-		FROM jym_b_seller_goods_property sgp
+			bgp.external_goods_id as externalGoodsId
+			, bgp.property_id as propertyId
+			, bgp.value_id as valueId
+			, bgp.value as value
+			, mp.type as type
+	 	 FROM jym_b_goods_property bgp
+    LEFT JOIN jym_m_property mp 
+		   ON bgp.property_id = mp.property_id
 		WHERE 1=1 
 		<if test="list != null and list.size() > 0">
-			AND sgp.external_goods_id in 
+			AND bgp.external_goods_id in 
 			<foreach collection="list" item="externalId" index="index" open="(" close=")" separator=",">
 				#{externalId}
 			</foreach>
