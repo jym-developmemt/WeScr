@@ -15,4 +15,7 @@ import org.springframework.stereotype.Service;
 public interface CreateImageDataService {
 
 	public boolean createImageData(List<Map<String, String>> externalGoodsId);
+	
+	// 执行未发送商品查询
+	public List<String> getNotSendData();
 }

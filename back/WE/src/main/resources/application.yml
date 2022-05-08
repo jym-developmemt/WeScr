@@ -191,6 +191,7 @@ core:
     JYM06: statusBacthQProcess
     JYM11: createImageFolderProcess
     JYM12: createImageDataProcess
+    JYM13: insertGoodsPropertyProcess
     
 jym:
   api_exec_enable: false

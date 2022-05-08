@@ -1,5 +1,6 @@
 package we.website.service.jym.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import we.base.base.BaseService;
+import we.website.dao.JymGoodsEntityDao;
 import we.website.dao.JymGoodsImagesDao;
+import we.website.model.jym.GoodsEntityModel;
 import we.website.model.jym.GoodsImagesModel;
 import we.website.service.jym.CreateImageDataService;
 
@@ -25,6 +28,9 @@ public class CreateImageDataServiceImp extends BaseService implements CreateImag
 
 	@Autowired
 	private JymGoodsImagesDao jymGoodsImagesDao;
+	
+	@Autowired
+	private JymGoodsEntityDao jymGoodsEntityDao;
 	
 	@Override
 	public boolean createImageData(List<Map<String, String>> externalGoodsIds) {
@@ -52,6 +58,20 @@ public class CreateImageDataServiceImp extends BaseService implements CreateImag
 			return false;
 		}
 		return true;
+	}
+	
+	@Override
+	public List<String> getNotSendData() {
+		
+		List<String> rtnList = new ArrayList<String>();
+		
+		List<GoodsEntityModel> getData = jymGoodsEntityDao.selectNotSendData();
+		
+		for (GoodsEntityModel tmpData : getData) {
+		
+			rtnList.add(tmpData.getExternalGoodsId());
+		}
+		return rtnList;
 	}
 
 }

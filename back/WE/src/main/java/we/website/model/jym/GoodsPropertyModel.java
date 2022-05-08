@@ -14,8 +14,8 @@ public class GoodsPropertyModel {
 	// 属性ID
 	private String propertyId;
 
-	// 属性值ID
-	private String valueId;
+	// 父属性值ID
+	private String parentId;
 
 	// 属性值
 	private String value;
@@ -39,12 +39,12 @@ public class GoodsPropertyModel {
 		this.propertyId = propertyId;
 	}
 
-	public String getValueId() {
-		return valueId;
+	public String getParentId() {
+		return parentId;
 	}
 
-	public void setValueId(String valueId) {
-		this.valueId = valueId;
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 
 	public String getValue() {
@@ -66,7 +66,7 @@ public class GoodsPropertyModel {
 	@Override
 	public String toString() {
 		return "GoodsPropertyModel [externalGoodsId=" + externalGoodsId + ", propertyId=" + propertyId + ", valueId="
-				+ valueId + ", value=" + value + "]";
+				+ parentId + ", value=" + value + "]";
 	}
 
 }

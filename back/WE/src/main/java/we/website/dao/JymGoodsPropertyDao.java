@@ -13,4 +13,6 @@ import we.website.model.jym.GoodsPropertyModel;
 public interface JymGoodsPropertyDao {
 
 	public List<GoodsPropertyModel> searchGoodsPropertiesById(List<String> externalGoodsId);
+	
+	public void insertData(GoodsPropertyModel externalGoodsId);
 }

@@ -7,12 +7,12 @@
 		SELECT 
 			bgp.external_goods_id as externalGoodsId
 			, bgp.property_id as propertyId
-			, bgp.value_id as valueId
+			, bgp.parent_id as parentId
 			, bgp.value as value
 			, mp.type as type
 	 	 FROM jym_b_goods_property bgp
     LEFT JOIN jym_m_property mp 
-		   ON bgp.property_id = mp.property_id
+		   ON bgp.parent_id = mp.property_id
 		WHERE 1=1 
 		<if test="list != null and list.size() > 0">
 			AND bgp.external_goods_id in 
@@ -21,4 +21,18 @@
 			</foreach>
 		</if>
 	</select>
+	
+	<insert id="insertData" parameterType="we.website.model.jym.GoodsPropertyModel">
+		INSERT INTO jym_b_goods_property(
+			external_goods_id
+			, property_id
+			, parent_id
+			, value
+		) VALUES (
+			#{externalGoodsId}
+			, #{propertyId}
+			, #{parentId}
+			, #{value}
+		)
+	</insert>
 </mapper>

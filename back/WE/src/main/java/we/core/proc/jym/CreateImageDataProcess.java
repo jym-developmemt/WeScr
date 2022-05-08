@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import we.base.exception.FacadeException;
 import we.base.util.CommonUtil;
 import we.core.dto.ProcessDto;
 import we.core.proc.IProcess;
@@ -45,7 +46,7 @@ public class CreateImageDataProcess implements IProcess {
 		
 		// 网盘路径失效时，不做任何处理
 		if (!localPath.exists()) {
-			throw new Exception("上传图片路径有误！");
+			throw new FacadeException("上传图片路径有误！");
 		}
 		
 		if (proceeDto.getListData1() != null) {

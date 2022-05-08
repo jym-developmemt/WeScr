@@ -184,6 +184,8 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 				if (!property.getExternalGoodsId().equals(entity.getExternalGoodsId()))
 					continue;
 
+				// 商品父节点属性ID
+				String parenttId = property.getParentId();
 				// 商品属性ID
 				String propertyId = property.getPropertyId();
 				// 属性类型
@@ -197,12 +199,12 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 					propertyDtl.put("value", property.getValue());
 
 					// 商品属性值ID
-					propertyDtl.put("value_id", CommonUtil.nvl(property.getValueId()));
+					propertyDtl.put("value_id", CommonUtil.nvl(propertyId));
 				}
 				else if(propertyType.equals("2")) {
-					if (propertyMap.containsKey(propertyId)) {
+					if (propertyMap.containsKey(parenttId)) {
 
-						propertyDtl = propertyMap.get(propertyId);
+						propertyDtl = propertyMap.get(parenttId);
 
 						// 商品属性值
 						String val = propertyDtl.get("value");
@@ -227,7 +229,7 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 					propertyDtl.put("value_id", "");
 				}
 
-				propertyMap.put(propertyId, propertyDtl);
+				propertyMap.put(parenttId, propertyDtl);
 			}
 
 			for (String key : propertyMap.keySet()) {

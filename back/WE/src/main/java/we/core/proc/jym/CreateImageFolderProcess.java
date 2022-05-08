@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import we.base.util.TokenUtils;
 import we.core.dto.ProcessDto;
 import we.core.proc.IProcess;
-import we.website.service.jym.CreateImageFolderService;
+import we.website.service.jym.CreateImageDataService;
 
 @Component()
 public class CreateImageFolderProcess implements IProcess {
@@ -23,7 +23,7 @@ public class CreateImageFolderProcess implements IProcess {
 	private String jymLocalNetdrivePath;
 	
 	@Autowired
-	private CreateImageFolderService jymCreateImgFolderService;
+	private CreateImageDataService jymCreateImageDataService;
 
 	@Override
 	public Object execute(ProcessDto proceeDto, List<Object> resultList) throws Exception {
@@ -52,7 +52,7 @@ public class CreateImageFolderProcess implements IProcess {
 			SecurityContextHolder.getContext().setAuthentication(TokenUtils.createBatchAuthentication());
 		}
 		
-		List<String> externalGoodsIds = jymCreateImgFolderService.getNotSendData();
+		List<String> externalGoodsIds = jymCreateImageDataService.getNotSendData();
 		
 		if (externalGoodsIds.size()> 0) {
 			this.createFolder(externalGoodsIds);
