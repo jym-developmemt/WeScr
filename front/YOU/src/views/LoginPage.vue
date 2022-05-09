@@ -179,7 +179,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: Center;
-  background-image: url("../assets/loginBack.jpg");
+  background-image: url("../assets/loginBack.webp");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
