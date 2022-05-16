@@ -20,7 +20,8 @@ public interface ResourceInfoDao {
 	 * 资源信息取得
 	 */
 	public ResourceInfoModel findResourceInfo(String resourceId);
-
+	public List<ResourceInfoModel> findResourceInfoALL(List<String> resourceId);
+	
 	/**
 	 * 资源信息追加
 	 */

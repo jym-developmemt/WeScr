@@ -42,13 +42,16 @@ public class CreateImageDataServiceImp extends BaseService implements CreateImag
 				
 				GoodsImagesModel gi = new GoodsImagesModel();
 				gi.setExternalGoodsId(externalGoodsId);
-				
+								
 				// 已有数据先清空
 				if (externalGoodsId != beforId) {
 					jymGoodsImagesDao.deleteGoodsImage(gi);
 				}
 				
 				gi.setImageUrl(tmpMap.get("image_url"));
+				if (tmpMap.containsKey("resource_id")) {
+					gi.setResourceId(tmpMap.get("resource_id"));
+				}
 				
 				jymGoodsImagesDao.insertGoodsImage(gi);
 				

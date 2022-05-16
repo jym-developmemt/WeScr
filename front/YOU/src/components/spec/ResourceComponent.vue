@@ -30,18 +30,18 @@
     >
       <u-button :props="this.uploadProp" :displayData="this.props.uploadLabel"></u-button>
     </Upload>
-    <!-- 下载 -->
-    <u-button
+        <!-- 下载 -->
+    <!-- <u-button
       v-if="model[modelKey]"
       :props="this.downloadProp"
       :displayData="this.props.downloadLabel"
-    ></u-button>
+    ></u-button> -->
     <!-- 删除 -->
-    <u-button
+    <!-- <u-button
       v-if="model[modelKey]"
       :props="this.deleteProp"
       :displayData="this.props.deleteLabel"
-    ></u-button>
+    ></u-button> -->
   </div>
 </template>
 

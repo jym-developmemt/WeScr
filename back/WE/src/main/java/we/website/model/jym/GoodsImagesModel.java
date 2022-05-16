@@ -19,6 +19,8 @@ public class GoodsImagesModel {
 
 	// 备注
 	private String note;
+	
+	private String resourceId;
 
 	public String getExternalGoodsId() {
 		return externalGoodsId;
@@ -50,6 +52,14 @@ public class GoodsImagesModel {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getResourceId() {
+		return resourceId;
+	}
+
+	public void setResourceId(String resourceId) {
+		this.resourceId = resourceId;
 	}
 
 	@Override

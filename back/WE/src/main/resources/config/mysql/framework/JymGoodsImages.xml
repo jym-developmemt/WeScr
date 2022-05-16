@@ -9,6 +9,7 @@
 			, bgi.image_id as imageId
 			, bgi.image_url as imageUrl
 			, bgi.note as note
+			, bgi.resource_id as resourceId
 		FROM jym_b_goods_images bgi
 		WHERE 1=1 
 		<if test="list != null and list.size() > 0">
@@ -25,11 +26,13 @@
 			, image_id
 			, image_url
 			, note
+			, resource_id
 		) VALUES (
 			#{externalGoodsId}
 			, #{imageId}
 			, #{imageUrl}
 			, #{note}
+			, #{resourceId}
 		)
 	</insert>
 	

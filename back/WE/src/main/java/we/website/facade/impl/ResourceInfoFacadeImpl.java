@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.aop.ThrowsAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -107,7 +106,10 @@ public class ResourceInfoFacadeImpl extends BaseFacade implements ResourceInfoFa
 
 		// 转换为相对路径
 		String timeDirectory = FilenameUtils.concat(uploadAbsolutePath, CommonUtil.getSystemDate("yyyyMMdd"));
+		
 		File uploadFile = FileUtils.getFile(timeDirectory, resourceId);
+		// 保存实际的文件名
+		//File uploadFile = FileUtils.getFile(timeDirectory, FilenameUtils.getName(resourceInfoDto.getFile().getOriginalFilename()));
 		String resourcePath = uploadFile.getAbsolutePath().replace(uploadAbsolutePath, uploadPath);
 
 		if (StringUtils.hasText(resourceInfoDto.getResourceId())) {

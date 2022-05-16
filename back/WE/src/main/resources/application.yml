@@ -192,11 +192,20 @@ core:
     JYM11: createImageFolderProcess
     JYM12: createImageDataProcess
     JYM13: insertGoodsPropertyProcess
+    JYM14: insertGoodsEntityProcess
     
 jym:
+  p1: 1642583217552236
+  p2: 1642583217571262
+  p3: 1642583217657360
+  p4: 1642583217768016
+  p5: 1642583217811076
   api_exec_enable: false
   local_netdisk_path: D:\testjym01
   netdisk_url: http://testjym01.pek3b.qingstor.com/
+  access_key_id: KSFTUROANOPBWWQWEPWX
+  secret_access_key: 18QiZVHqujjv7wRFWeztidxj78nGsUBidOeMrhRI
+  bucketName: testjym01
 
 
 

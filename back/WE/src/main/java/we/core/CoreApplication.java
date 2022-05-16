@@ -5,11 +5,16 @@
  *******************************************************************************/
 package we.core;
 
+import java.util.concurrent.Executor;
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -18,6 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author cp0
  * @since 0.0
  */
+@EnableAsync
 @SpringBootApplication
 @EnableConfigurationProperties(CoreProperties.class)
 @EnableTransactionManagement
@@ -28,5 +34,13 @@ public class CoreApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CoreApplication.class, args);
 	}
-
+	
+	@Bean("taskExecutor")
+    public Executor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(20);
+        executor.setThreadNamePrefix("TaskThread-");
+        executor.initialize();
+        return executor;
+    }
 }

@@ -13,6 +13,9 @@
         <result column="mServerInfoId" property="serverInfoId"/>
         <result column="mSupportRetrieveCompensation" property="supportRetrieveCompensation"/>
         <result column="mCanBargain" property="canBargain"/>
+        <result column="mValue1" property="value1"/>
+        <result column="mValue2" property="value2"/>
+        <result column="mValue3" property="value3"/>
         <result column="mCreateAt" property="createAt"/>
         <result column="mUpdateAt" property="updateAt"/>
         
@@ -44,6 +47,9 @@
 			, mge.server_info_id as mServerInfoId
 			, mge.support_retrieve_compensation as mSupportRetrieveCompensation
 			, mge.can_bargain as mCanBargain
+			, mge.value1 as mValue1
+			, mge.value2 as mValue2
+			, mge.value3 as mValue3
 			, mge.create_at as mCreateAt
 			, mge.update_at as mUpdateAt
 			, fsi.system as siSystem
@@ -79,4 +85,36 @@
 		    or external_batch_id = "" 
 		</where>
 	</select>
+	
+	<insert id="insertData" parameterType="we.website.model.jym.GoodsEntityModel">
+		INSERT INTO jym_m_goods_entity(
+			external_goods_id
+			, title
+			, price
+			, storage
+			, description
+			, server_info_id
+			, support_retrieve_compensation
+			, can_bargain
+			, value1
+			, value2
+			, value3
+			, create_at
+			, update_at
+		) VALUES (
+			#{externalGoodsId}
+			, #{title}
+			, #{price}
+			, #{storage}
+			, #{description}
+			, #{serverInfoId}
+			, #{supportRetrieveCompensation}
+			, #{canBargain}
+			, #{value1}
+			, #{value2}
+			, #{value3}
+			, #{createAt}
+			, #{updateAt}
+		)
+	</insert>
 </mapper>

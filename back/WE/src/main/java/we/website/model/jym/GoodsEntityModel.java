@@ -23,7 +23,7 @@ public class GoodsEntityModel {
 	private long storage;
 
 	// 商品描述
-	private String description;;
+	private String description;
 
 	// 服务器关联信息ID
 	private String serverInfoId;
@@ -33,6 +33,15 @@ public class GoodsEntityModel {
 
 	// 是否支持议价
 	private boolean canBargain;
+	
+	// 冒险等级
+	private String value1;
+	
+	// 五星角色
+	private String value2;
+	
+	// 五行武器
+	private String value3;
 
 	// 创建时间
 	private Date createAt;
@@ -105,6 +114,30 @@ public class GoodsEntityModel {
 
 	public void setCanBargain(boolean canBargain) {
 		this.canBargain = canBargain;
+	}
+
+	public String getValue1() {
+		return value1;
+	}
+
+	public void setValue1(String value1) {
+		this.value1 = value1;
+	}
+
+	public String getValue2() {
+		return value2;
+	}
+
+	public void setValue2(String value2) {
+		this.value2 = value2;
+	}
+
+	public String getValue3() {
+		return value3;
+	}
+
+	public void setValue3(String value3) {
+		this.value3 = value3;
 	}
 
 	public Date getCreateAt() {

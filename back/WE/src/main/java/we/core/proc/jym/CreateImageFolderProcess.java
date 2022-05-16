@@ -45,7 +45,7 @@ public class CreateImageFolderProcess implements IProcess {
 	/**
 	 * 定时作成商品文件夹
 	 */
-	@Scheduled(cron = "5 * * * * ?")
+	//@Scheduled(cron = "5 * * * * ?")
 	public void autoCreate() {
 		// 用户认证
 		if (SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -59,14 +59,14 @@ public class CreateImageFolderProcess implements IProcess {
 		}
 	}
 
-	public void createFolder(List<String> externalGoodsIds) {
+	public boolean createFolder(List<String> externalGoodsIds) {
 		String localNetdrivePath = jymLocalNetdrivePath;
 		
 		File localPath = new File(localNetdrivePath);
 		
 		// 网盘路径失效时，不做任何处理
 		if (!localPath.exists()) {
-			return;
+			return false;
 		}
 		
 		if (externalGoodsIds.size() >0 ) {
@@ -79,6 +79,9 @@ public class CreateImageFolderProcess implements IProcess {
 					productFile.mkdir();
 				}
 			}
+			return true;
 		}
+		
+		return false;
 	}
 }

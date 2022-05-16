@@ -57,6 +57,17 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 	@Value("${jym.api_exec_enable}")
 	private boolean jymExecEnable;
 
+	@Value("${jym.p1}")
+	private String jymProperty1;
+	@Value("${jym.p2}")
+	private String jymProperty2;
+	@Value("${jym.p3}")
+	private String jymProperty3;
+	@Value("${jym.p4}")
+	private String jymProperty4;
+	@Value("${jym.p5}")
+	private String jymProperty5;
+	
 	@Autowired
 	private JymGoodsEntityDao jymGoodsEntityDao;
 
@@ -102,7 +113,7 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 		List<GoodsEntityModel> goodsList = jymGoodsEntityDao.searchGoodsListById(externalGoodsId);
 
 		// 查询商品属性
-		List<GoodsPropertyModel> goodsProperties = jymGoodsPropertyDao.searchGoodsPropertiesById(externalGoodsId);
+//		List<GoodsPropertyModel> goodsProperties = jymGoodsPropertyDao.searchGoodsPropertiesById(externalGoodsId);
 
 		// 查询商品图片
 		List<GoodsImagesModel> goodsImages = jymGoodsImagesDao.searchGoodsImagesById(externalGoodsId);
@@ -179,58 +190,89 @@ public class BacthPublishServiceImp extends BaseService implements BacthPublishS
 
 			Map<String, Map<String, String>> propertyMap = new HashMap<String, Map<String, String>>();
 
-			for (GoodsPropertyModel property : goodsProperties) {
-
-				if (!property.getExternalGoodsId().equals(entity.getExternalGoodsId()))
-					continue;
-
-				// 商品父节点属性ID
-				String parenttId = property.getParentId();
-				// 商品属性ID
-				String propertyId = property.getPropertyId();
-				// 属性类型
-				String propertyType = property.getType();
-				Map<String, String> propertyDtl = new HashMap<String, String>();
-
-				// 只有属性=1单选时，需要valueId
-				// 只有属性=2多选时，所有的value需要逗号隔开保存到一起
-				if (propertyType.equals("1")) {
-					// 商品属性值
-					propertyDtl.put("value", property.getValue());
-
-					// 商品属性值ID
-					propertyDtl.put("value_id", CommonUtil.nvl(propertyId));
-				}
-				else if(propertyType.equals("2")) {
-					if (propertyMap.containsKey(parenttId)) {
-
-						propertyDtl = propertyMap.get(parenttId);
-
-						// 商品属性值
-						String val = propertyDtl.get("value");
-						val = val + "," + property.getValue();
-						propertyDtl.put("value", val);
-
-						// 商品属性值ID
-						propertyDtl.put("value_id", "");
-					} else {
-
-						// 商品属性值
-						propertyDtl.put("value", property.getValue());
-
-						// 商品属性值ID
-						propertyDtl.put("value_id", "");
-					}
-				}else {
-					// 商品属性值
-					propertyDtl.put("value", property.getValue());
-
-					// 商品属性值ID
-					propertyDtl.put("value_id", "");
-				}
-
-				propertyMap.put(parenttId, propertyDtl);
-			}
+//			for (GoodsPropertyModel property : goodsProperties) {
+//				
+//				if (!property.getExternalGoodsId().equals(entity.getExternalGoodsId()))
+//					continue;
+//
+//				// 商品父节点属性ID
+//				String parenttId = property.getParentId();
+//				// 商品属性ID
+//				String propertyId = property.getPropertyId();
+//				// 属性类型
+//				String propertyType = property.getType();
+//				Map<String, String> propertyDtl = new HashMap<String, String>();
+//
+//				// 只有属性=1单选时，需要valueId
+//				// 只有属性=2多选时，所有的value需要逗号隔开保存到一起
+//				if (propertyType.equals("1")) {
+//					// 商品属性值
+//					propertyDtl.put("value", property.getValue());
+//
+//					// 商品属性值ID
+//					propertyDtl.put("value_id", CommonUtil.nvl(propertyId));
+//				}
+//				else if(propertyType.equals("2")) {
+//					if (propertyMap.containsKey(parenttId)) {
+//
+//						propertyDtl = propertyMap.get(parenttId);
+//
+//						// 商品属性值
+//						String val = propertyDtl.get("value");
+//						val = val + "," + property.getValue();
+//						propertyDtl.put("value", val);
+//
+//						// 商品属性值ID
+//						propertyDtl.put("value_id", "");
+//					} else {
+//
+//						// 商品属性值
+//						propertyDtl.put("value", property.getValue());
+//
+//						// 商品属性值ID
+//						propertyDtl.put("value_id", "");
+//					}
+//				}else {
+//					// 商品属性值
+//					propertyDtl.put("value", property.getValue());
+//
+//					// 商品属性值ID
+//					propertyDtl.put("value_id", "");
+//				}
+//
+//				propertyMap.put(parenttId, propertyDtl);
+//			}
+			
+			Map<String, String> propertyDtl = new HashMap<String, String>();
+			// 冒险等阶
+			propertyDtl.put("value", entity.getValue1());
+			propertyDtl.put("value_id", "");
+			propertyMap.put(jymProperty1, propertyDtl);
+			
+			propertyDtl = new HashMap<String, String>();
+			// 五星角色
+			propertyDtl.put("value", entity.getValue2());
+			propertyDtl.put("value_id", "");
+			propertyMap.put(jymProperty2, propertyDtl);
+			
+			propertyDtl = new HashMap<String, String>();
+			// 五星武器
+			propertyDtl.put("value", entity.getValue3());
+			propertyDtl.put("value_id", "");
+			propertyMap.put(jymProperty3, propertyDtl);
+			
+			propertyDtl = new HashMap<String, String>();
+			// 帐号绑定
+			propertyDtl.put("value", "2");
+			propertyDtl.put("value_id", "");
+			propertyMap.put(jymProperty4, propertyDtl);
+			
+			propertyDtl = new HashMap<String, String>();
+			// 商家在线
+			propertyDtl.put("value", "全天在线");
+			propertyDtl.put("value_id", "1642583177892531");
+			propertyMap.put(jymProperty5, propertyDtl);
+			
 
 			for (String key : propertyMap.keySet()) {
 

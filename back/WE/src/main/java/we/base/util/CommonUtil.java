@@ -257,7 +257,7 @@ public class CommonUtil {
 		}
 		return strBuff.toString();
 	}
-
+	
 	/**
 	 * 文字转数组
 	 */
@@ -456,5 +456,20 @@ public class CommonUtil {
 
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(json, new TypeReference<HashMap<String, Object>>(){});
+	}
+	
+	/**
+	 * objToStringList
+	 */
+	public static List<String> objToStringList(Object obj) throws Exception {
+		List<String> result  = new ArrayList<String>();
+		
+		if (obj instanceof ArrayList<?>) {
+			for (Object o : (List<?>) obj) {
+				result.add(String.class.cast(o));
+			}
+		}
+		
+		return result;
 	}
 }

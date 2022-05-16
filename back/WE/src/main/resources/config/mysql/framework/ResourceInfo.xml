@@ -73,6 +73,23 @@
 			resource_id = #{resourceId}
 		</where>
 	</select>
+	
+	<select id="findResourceInfoALL" parameterType="list" resultType="we.website.model.ResourceInfoModel" >
+		select resource_id resourceId
+			, resource_name resourceName
+			, resource_type resourceType
+			, resource_path resourcePath
+			, auth_type authType
+			, auth_value authValue
+		from m_resource_info
+		WHERE 1=1 
+		<if test="list != null and list.size() > 0">
+			AND resource_id in 
+			<foreach collection="list" item="resourceId" index="index" open="(" close=")" separator=",">
+				#{resourceId}
+			</foreach>
+		</if>
+	</select>
 
 
 	<!-- 资源信息取得 -->
