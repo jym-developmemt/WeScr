@@ -3,6 +3,7 @@ package we.website.service.jym.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +83,65 @@ public class StatusBacthQServiceImp extends BaseService implements StautsBatchQS
 				// 设置批处理明细返回参数
 				BatchDtlModel batchDtlModel = new BatchDtlModel();
 				batchDtlModel.setGoodsId(CommonUtil.toString(goodsStauts.getGoodsId()));
-				batchDtlModel.setGoodsStatus(Math.toIntExact(goodsStauts.getStatus()));
+				
+				int goodsStatus = Math.toIntExact(goodsStauts.getStatus());
+				batchDtlModel.setGoodsStatus(goodsStatus);
+				
+				switch(goodsStatus ) {
+					case 1:
+						batchDtlModel.setReason("公司审核");
+						break;
+					case 2:
+						batchDtlModel.setReason("待运营审核");
+						break;
+					case 3:
+						batchDtlModel.setReason("已上架");
+						break;
+					case 4:
+						batchDtlModel.setReason("您⾃⼰操作下架");
+						break;
+					case 5:
+						batchDtlModel.setReason("超出商品有效期");
+						break;
+					case 6:
+						batchDtlModel.setReason("商品已经销售完毕");
+						break;
+					case 7:
+						batchDtlModel.setReason("商品信息审核不通过");
+						break;
+					case 8:
+						batchDtlModel.setReason("商品审核下架");
+						break;
+					case 9:
+						batchDtlModel.setReason("商品暂停交易");
+						break;
+					case 10:
+						batchDtlModel.setReason("商品发布撤回");
+						break;
+					case 11:
+						batchDtlModel.setReason("待提交");
+						break;
+					case 12:
+						batchDtlModel.setReason("已删除");
+						break;
+					case 13:
+						batchDtlModel.setReason("账号安全审核不通过");
+						break;
+					case 14:
+						batchDtlModel.setReason("系统补全信息超时下架");
+						break;
+					case 15:
+						batchDtlModel.setReason("系统补全信息不完整下架");
+						break;
+					case 16:
+						batchDtlModel.setReason("待系统补全");
+						break;
+					default:
+						batchDtlModel.setReason("");
+						
+				}
+				
+				batchDtlModel.setUpdateAt(DateTime.now().toDate());
 							
 				// 批处理明细表更新返回参数
 				jymBatchDtlDao.updateBatchDtl(batchDtlModel);

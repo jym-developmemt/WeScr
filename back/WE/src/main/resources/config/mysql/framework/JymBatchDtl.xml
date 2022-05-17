@@ -43,8 +43,16 @@
 			, update_at = now()
 		</set>
 		<where>
-			external_batch_id = #{externalBatchId}
-		    and external_goods_id = #{externalGoodsId}
+			1 = 1 
+			<if test="externalBatchId != null">
+				and external_batch_id = #{externalBatchId}
+			</if>
+		    <if test="externalGoodsId != null">
+		    	and external_goods_id = #{externalGoodsId}
+		    </if>
+		    <if test="goodsId != null">
+				and goods_id = #{goodsId}
+			</if>
 		</where>
 	</update>
 	
