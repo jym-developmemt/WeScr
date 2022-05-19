@@ -50,8 +50,8 @@
 		    <if test="externalGoodsId != null">
 		    	and external_goods_id = #{externalGoodsId}
 		    </if>
-		    <if test="goodsId != null">
-				and goods_id = #{goodsId}
+		    <if test="whereGoodsId != null">
+				and goods_id = #{whereGoodsId}
 			</if>
 		</where>
 	</update>

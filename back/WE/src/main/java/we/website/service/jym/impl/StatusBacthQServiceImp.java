@@ -82,7 +82,7 @@ public class StatusBacthQServiceImp extends BaseService implements StautsBatchQS
 			for (GoodsStatusDto goodsStauts : goodsStatusList) {
 				// 设置批处理明细返回参数
 				BatchDtlModel batchDtlModel = new BatchDtlModel();
-				batchDtlModel.setGoodsId(CommonUtil.toString(goodsStauts.getGoodsId()));
+				batchDtlModel.setWhereGoodsId(CommonUtil.toString(goodsStauts.getGoodsId()));
 				
 				int goodsStatus = Math.toIntExact(goodsStauts.getStatus());
 				batchDtlModel.setGoodsStatus(goodsStatus);
@@ -136,8 +136,6 @@ public class StatusBacthQServiceImp extends BaseService implements StautsBatchQS
 					case 16:
 						batchDtlModel.setReason("待系统补全");
 						break;
-					default:
-						batchDtlModel.setReason("");
 						
 				}
 				

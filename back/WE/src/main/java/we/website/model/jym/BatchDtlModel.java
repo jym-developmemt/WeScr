@@ -32,6 +32,9 @@ public class BatchDtlModel {
 
 	/** 更新时间 */
 	private Date updateAt;
+	
+	/** 搜索时用交易猫商品ID */
+	private String whereGoodsId;
 
 	public String getExternalBatchId() {
 		return externalBatchId;
@@ -95,6 +98,14 @@ public class BatchDtlModel {
 
 	public void setUpdateAt(Date updateAt) {
 		this.updateAt = updateAt;
+	}
+
+	public String getWhereGoodsId() {
+		return whereGoodsId;
+	}
+
+	public void setWhereGoodsId(String whereGoodsId) {
+		this.whereGoodsId = whereGoodsId;
 	}
 
 }
