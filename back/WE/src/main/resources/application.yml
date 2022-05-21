@@ -20,7 +20,7 @@ spring:
   datasource:
     type: org.springframework.jdbc.datasource.DriverManagerDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/jym?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://localhost:3306/jym99?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
     username: root
     password: 1qaz@WSX
   servlet:
@@ -193,6 +193,7 @@ core:
     JYM12: createImageDataProcess
     JYM13: insertGoodsPropertyProcess
     JYM14: insertGoodsEntityProcess
+    JYM15: uploadImageDataProcess
     
 jym:
   p1: 1642583217552236
@@ -200,7 +201,8 @@ jym:
   p3: 1642583217657360
   p4: 1642583217768016
   p5: 1642583217811076
-  api_exec_enable: false
+  api_exec_enable: true
+  auto_updStatus_enable: false
   local_netdisk_path: D:\testjym01
   netdisk_url: http://testjym01.pek3b.qingstor.com/
   access_key_id: KSFTUROANOPBWWQWEPWX

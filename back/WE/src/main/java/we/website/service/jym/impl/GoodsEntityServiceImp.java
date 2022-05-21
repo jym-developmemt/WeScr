@@ -3,11 +3,9 @@ package we.website.service.jym.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -18,22 +16,20 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.qingstor.sdk.config.EnvContext;
-import com.qingstor.sdk.constants.QSConstant;
 import com.qingstor.sdk.exception.QSException;
-import com.qingstor.sdk.request.RequestHandler;
-import com.qingstor.sdk.request.ResponseCallBack;
 import com.qingstor.sdk.service.*;
-import com.qingstor.sdk.utils.QSSignatureUtil;
 
 import we.base.util.CommonUtil;
 import we.core.dto.ProcessDto;
 import we.website.dao.JymGoodsEntityDao;
+import we.website.dao.JymGoodsImagesDao;
 import we.website.dao.ResourceInfoDao;
 import we.website.model.ResourceInfoModel;
 import we.website.model.jym.GoodsEntityModel;
-import we.website.service.ResourceInfoService;
+import we.website.model.jym.GoodsImagesModel;
 import we.website.service.jym.CreateImageDataService;
 import we.website.service.jym.GoodsEntityService;
 
@@ -65,6 +61,9 @@ public class GoodsEntityServiceImp implements GoodsEntityService {
 	
 	@Autowired
 	private ResourceInfoDao resourceInfoDao;
+	
+	@Autowired
+	private JymGoodsImagesDao jymGoodsImagesDao;
 	
 	@Override
 	public boolean insertData(ProcessDto proceeDto) {
@@ -131,15 +130,36 @@ public class GoodsEntityServiceImp implements GoodsEntityService {
 	    		jymCreateImageDataService.createImageData(externalGoodsIds);
 
 	    		// 上传图片
-	    		this.jymSendData(newExternalGoodsId, resourceIds);
+	    		this.jymUpData(newExternalGoodsId, resourceIds);
 	    	}
 	    }
 		
 		return true;
 	}
 	
+	public void uploadImageData(List<String> externalGoodsIds) {
+		
+		for (String externalGoodsId : externalGoodsIds) {
+			List<String> tmpId = new ArrayList<String>();
+			tmpId.add(externalGoodsId);
+			
+			// 查询商品图片
+			List<GoodsImagesModel> goodsImages = jymGoodsImagesDao.searchGoodsImagesById(tmpId);
+			
+			List<String> resourceIds = new ArrayList<String>();
+			for(GoodsImagesModel gim : goodsImages) {
+				if (StringUtils.hasText(gim.getResourceId())) {
+					resourceIds.add(gim.getResourceId());
+				}
+			}
+			
+			// 上传图片
+    		this.jymUpData(externalGoodsId, resourceIds);			
+		}
+	}
+	
 	@Async("taskExecutor")
-    public void jymSendData(String folderId, List<String> resourceIds) {
+    public void jymUpData(String folderId, List<String> resourceIds) {
 				
 		try {
 	        //创建EvnContext
@@ -195,30 +215,6 @@ public class GoodsEntityServiceImp implements GoodsEntityService {
 		        	logger.error( f.getName() + "上传失败");
 		        }
     		}
-//	        RequestHandler reqHandler = bucket.putObjectAsyncRequest(objectKey, input,
-//	                new ResponseCallBack<Bucket.PutObjectOutput>() {
-//	                    public void onAPIResponse(Bucket.PutObjectOutput output) {
-//	                        if (output.getStatueCode() != 201) {
-//	                            System.out.println("Message = " + output.getMessage());
-//	                            System.out.println("RequestId = " + output.getRequestId());
-//	                            System.out.println("Code = " + output.getCode());
-//	                            System.out.println("StatueCode = " + output.getStatueCode());
-//	                            System.out.println("Url = " + output.getUrl());
-//	                        }
-//	                        System.exit(0);
-//	                    }
-//	                });
-//	        Calendar instance = Calendar.getInstance(TimeZone.getTimeZone("Asia/Shanghai"));
-//	        String gmtTime = QSSignatureUtil;
-//
-//	        //验证需要这个Date header
-//	        reqHandler.getBuilder().setHeader(QSConstant.HEADER_PARAM_KEY_DATE, gmtTime);
-//	        String strToSignature = reqHandler.getStringToSignature();
-//	        String serverAuthorization = QSSignatureUtil.generateSignature(env.getSecretAccessKey(),
-//	                strToSignature);
-//	        reqHandler.setSignature(env.getAccessKeyId(), serverAuthorization);
-//	        //异步发送
-//	        reqHandler.sendAsync();
 
 	    }catch (QSException e) {
 	        e.printStackTrace();

@@ -117,4 +117,15 @@
 			, #{updateAt}
 		)
 	</insert>
+	
+	<select id="selectGoodsIdData" resultType="String" >
+		select 
+		       goods_id as goodsId
+		from jym_v_goods_entity
+		<where>
+		    1 = 1
+		    and goods_id is not null
+		    and goods_id != "" 
+		</where>
+	</select>
 </mapper>

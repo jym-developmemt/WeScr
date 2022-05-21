@@ -1,5 +1,6 @@
 package we.website.service.jym.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.taobao.api.ApiException;
@@ -21,8 +24,10 @@ import com.taobao.api.response.AlibabaJymItemExternalGoodsStatusBatchQueryRespon
 
 import we.base.base.BaseService;
 import we.base.util.CommonUtil;
+import we.base.util.TokenUtils;
 import we.website.constant.Constant;
 import we.website.dao.JymBatchDtlDao;
+import we.website.dao.JymGoodsEntityDao;
 import we.website.model.jym.BatchDtlModel;
 import we.website.service.jym.StautsBatchQService;
 
@@ -38,15 +43,46 @@ public class StatusBacthQServiceImp extends BaseService implements StautsBatchQS
 
 	@Value("${jym.api_exec_enable}")
 	private boolean jymExecEnable;
-
+	
+	@Value("${jym.auto_updStatus_enable}")
+	private boolean jymAutoUpdStatusEnable;
+	
 	@Autowired
 	private JymBatchDtlDao jymBatchDtlDao;
+	
+	@Autowired
+	private JymGoodsEntityDao jymGoodsEntityDao;
 	
 	@Override
 	public boolean execStatusBatch(List<String> goodsIds) {
 		return this.execTaobaoApi(goodsIds);
 	}
-
+	
+	/**
+	 * 定时查询
+	 */
+	@Scheduled(cron = "10 * * * * ?")
+	public void autoBatchTaskQ() {
+		
+		if (!jymAutoUpdStatusEnable) {
+			return;
+		}
+		
+		// 用户认证
+		if (SecurityContextHolder.getContext().getAuthentication() == null) {
+			SecurityContextHolder.getContext().setAuthentication(TokenUtils.createBatchAuthentication());
+		}
+		
+		List<String> goodsIds = new ArrayList<>();
+		
+		// 批量查询商品对象
+		goodsIds = jymGoodsEntityDao.selectGoodsIdData();
+		
+		if (goodsIds.size() > 0) {
+			this.execTaobaoApi(goodsIds); 
+		}
+	}
+	
 	/**
 	 * 向交易猫批量查询商品状态
 	 * 

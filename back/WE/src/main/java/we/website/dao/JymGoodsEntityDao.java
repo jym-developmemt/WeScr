@@ -19,4 +19,6 @@ public interface JymGoodsEntityDao {
 	public void insertData(GoodsEntityModel goodEntityData);
 	
 	public void updateData(GoodsEntityModel goodEntityData);
+	
+	public List<String> selectGoodsIdData();
 }
