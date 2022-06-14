@@ -78,13 +78,13 @@ export default {
         userId: [
           {
             required: true,
-            message: ["s.common.error.input_required", "s.user.login.user_id"]
+            message: [this.$t('s.user.login.user_id_required')]
           }
         ],
         password: [
           {
             required: true,
-            message: ["s.common.error.input_required", "s.user.login.password"]
+            message: [this.$t('s.user.login.password_required')]
           }
         ]
       }

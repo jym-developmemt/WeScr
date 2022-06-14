@@ -59,7 +59,7 @@ public class ResourceInfoFacadeImpl extends BaseFacade implements ResourceInfoFa
 		// 资源ID
 		String resourceId = resourceInfoDto.getResourceId();
 		if (StringUtils.isEmpty(resourceId)) {
-			resourceId = CommonUtil.generateKey();
+			resourceId = CommonUtil.generateKey()+ CommonUtil.getRandomString(4);
 		}
 
 		// 上传路径

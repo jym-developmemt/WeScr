@@ -1,7 +1,6 @@
 package we.website.service.jym.impl;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -49,9 +46,6 @@ public class GoodsEntityServiceImp implements GoodsEntityService {
 	
 	@Value("${jym.bucketName}")
 	private String jymBucketName;
-	
-	@Autowired
-	private ApplicationContext applicationContext;
 	
 	@Autowired
 	private JymGoodsEntityDao jymGoodsEntityDao;
@@ -127,8 +121,10 @@ public class GoodsEntityServiceImp implements GoodsEntityService {
 			}
 	    	
 	    	if (externalGoodsIds.size()>0) {
-	    		jymCreateImageDataService.createImageData(externalGoodsIds);
-
+	    		jymCreateImageDataService.createImageData(externalGoodsIds);	
+	    	}
+	    	
+	    	if (resourceIds.size()>0) {
 	    		// 上传图片
 	    		this.jymUpData(newExternalGoodsId, resourceIds);
 	    	}
@@ -158,7 +154,7 @@ public class GoodsEntityServiceImp implements GoodsEntityService {
 		}
 	}
 	
-	@Async("taskExecutor")
+//	@Async("taskExecutor")
     public void jymUpData(String folderId, List<String> resourceIds) {
 				
 		try {
@@ -173,51 +169,50 @@ public class GoodsEntityServiceImp implements GoodsEntityService {
 	        Bucket bucket = new Bucket(env, zoneName, bucketName);
 	        
 	        //上传文件夹
-	        String objFolder = folderId + "/";
-	        Bucket.PutObjectInput inputFolder = new Bucket.PutObjectInput();
-	       
-	        Bucket.PutObjectOutput outputFolder = bucket.putObject(objFolder, inputFolder);
-	        if (outputFolder.getStatueCode() != 201) {
-	        	logger.error( folderId + "上传失败");
-	        	return;
-	        }
+//	        String objFolder = folderId + "/";
+//	        Bucket.PutObjectInput inputFolder = new Bucket.PutObjectInput();
+//	       
+//	        Bucket.PutObjectOutput outputFolder = bucket.putObject(objFolder, inputFolder);
+//	        if (outputFolder.getStatueCode() != 201) {
+//	        	logger.error( folderId + "上传失败");
+//	        	return;
+//	        }
 	        
     		// 从新获取
     		List<ResourceInfoModel> resourceInfoAll = resourceInfoDao.findResourceInfoALL(resourceIds);
     		
     		for (ResourceInfoModel resourceInfo : resourceInfoAll) {
     		
-	    		Resource resource = applicationContext.getResource(resourceInfo.getResourcePath());
-		        
-	    		if (!resource.exists()) {
-	    			logger.error(resource.getFilename() + "没有正确的上传文件信息");
-	    			continue;
-	    		}
-	    		
 		        //最终上传到对象存储的文件显示的文件名称
 	    		String objectKey = folderId + "/" + resourceInfo.getResourceName();
 		        Bucket.PutObjectInput input = new Bucket.PutObjectInput();
 		        
+		        String filePath = CommonUtil.convertToAbsolutePath(resourceInfo.getResourcePath());
+		        
 		        //要上传的本地文件的路径
-		        File f;
-				try {
-					f = resource.getFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-					return;
-				}
+		        File f = new File(filePath);
+		        
+		        if (!f.exists()) {
+	    			logger.error(f.getName() + "没有正确的上传文件信息");
+	    			continue;
+	    		}
+
 		        input.setBodyInputFile(f);
-		        input.setContentLength(f.length());
 		        
 		        Bucket.PutObjectOutput output = bucket.putObject(objectKey, input);
 		        
 		        if (output.getStatueCode() != 201) {
 		        	logger.error( f.getName() + "上传失败");
+		        	logger.error( output.getMessage());
+		        }
+		        else {
+		        	logger.info(f.getName() + "正确上传文件");
 		        }
     		}
 
 	    }catch (QSException e) {
 	        e.printStackTrace();
+	        logger.error("QingCloud:" + e.getErrorMessage());
 	    }
     }
 }
